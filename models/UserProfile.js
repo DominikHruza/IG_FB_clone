@@ -5,7 +5,23 @@ module.exports = class UserProfile {
     this.id = userId;
     this.photos = null;
   }
-  async getProfile() {}
+  async getProfile() {
+    try {
+      const response = await db.query(
+        'SELECT username FROM users where id = ?',
+        [this.id]
+      );
+
+      //If no user in db return null
+      if (!response[0][0]) {
+        return null;
+      } else {
+        return response[0];
+      }
+    } catch (err) {
+      console.error(error);
+    }
+  }
 
   async getUserPhotos() {
     try {

@@ -31,7 +31,21 @@ exports.postSignUp = async (req, res) => {
     if (userDbInsert === 1062) {
       return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
     }
-    res.status(201).send({ msg: 'Sign up successful' });
+    //Generate and send jwt token
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+    jwt.sign(
+      payload,
+      'mypracticejwttokengenerate',
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
   } catch (error) {
     // Catch server errors
     console.error(error.message);
