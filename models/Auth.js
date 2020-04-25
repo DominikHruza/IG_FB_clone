@@ -10,11 +10,12 @@ module.exports = class userAuth {
 
   async insertNewUser() {
     try {
-      await db.query(
+      const res = await db.query(
         `INSERT INTO users (username, email, pass) VALUES (?,?,?)`,
         [this.username, this.email, this.password]
       );
-      return 'success';
+      // Return id of new inserted user
+      return res[0].insertId;
     } catch (error) {
       return error.errno;
     }
@@ -25,6 +26,21 @@ module.exports = class userAuth {
       const response = await db.query(
         `SELECT id, email, username, pass FROM users WHERE email = ?;`,
         [email]
+      );
+      //If no user with that email in db
+      if (response[0] === []) return null;
+      //if email found in db
+      return response[0][0];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async getUserByID(id) {
+    try {
+      const response = await db.query(
+        `SELECT id, email, username FROM users WHERE id = ?;`,
+        [id]
       );
       //If no user with that email in db
       if (response[0] === []) return null;

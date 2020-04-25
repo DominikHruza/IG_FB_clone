@@ -1,19 +1,19 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../actions/alerts';
 import { signUp } from '../actions/auth';
 
-const SignUp = ({ setAlert, signUp }) => {
+const SignUp = ({ setAlert, signUp, isAuthenticated }) => {
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
     passwordRepeat: '',
   });
 
-  const { name, email, password, passwordRepeat } = formData;
+  const { username, email, password, passwordRepeat } = formData;
 
   const handleInput = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,9 +24,14 @@ const SignUp = ({ setAlert, signUp }) => {
     if (password !== passwordRepeat) {
       setAlert('Passwords dont match', 'danger');
     } else {
-      signUp({ name, email, password });
+      signUp({ username, email, password });
     }
   };
+
+  // Check if user logged in
+  if (isAuthenticated) {
+    return <Redirect to='/feed' />;
+  }
 
   return (
     <Fragment>
@@ -39,8 +44,8 @@ const SignUp = ({ setAlert, signUp }) => {
           <input
             type='text'
             placeholder='Name'
-            name='name'
-            value={name}
+            name='username'
+            value={username}
             onChange={(e) => handleInput(e)}
           />
         </div>
@@ -83,8 +88,14 @@ const SignUp = ({ setAlert, signUp }) => {
     </Fragment>
   );
 };
+
 SignUp.propTypes = {
   setAlert: PropTypes.func.isRequired,
   signUp: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
-export default connect(null, { setAlert, signUp })(SignUp);
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+export default connect(mapStateToProps, { setAlert, signUp })(SignUp);

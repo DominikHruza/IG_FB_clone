@@ -3,9 +3,16 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 
-exports.getSignUp = (req, res) => {
-  res.send('User sign up');
+exports.getUser = async (req, res) => {
+  try {
+    const user = await Auth.getUserByID(req.user.id);
+    res.json(user);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Server error');
+  }
 };
+
 exports.getUserLogin = (req, res) => {
   res.send('User login');
 };
@@ -34,9 +41,10 @@ exports.postSignUp = async (req, res) => {
     //Generate and send jwt token
     const payload = {
       user: {
-        id: user.id,
+        id: userDbInsert,
       },
     };
+    console.log(payload);
     jwt.sign(
       payload,
       'mypracticejwttokengenerate',

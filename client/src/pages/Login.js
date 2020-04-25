@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { loginUser } from '../actions/auth';
 
-const Login = () => {
+const Login = ({ loginUser, isAuthenticated }) => {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
-    passwordRepeat: '',
   });
 
   const { email, password } = formData;
@@ -16,9 +17,16 @@ const Login = () => {
   };
 
   const handleFormSubmit = async (e) => {
+    console.log('login: ', email, ' ', password);
     e.preventDefault();
-    console.log('Success');
+    loginUser(email, password);
   };
+
+  // Redirect if user logged in
+  if (isAuthenticated) {
+    return <Redirect to='/feed' />;
+  }
+
   return (
     <div>
       <h1 className='large text-primary'>Login</h1>
@@ -53,5 +61,11 @@ const Login = () => {
     </div>
   );
 };
-
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+export default connect(mapStateToProps, { loginUser })(Login);
