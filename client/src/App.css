@@ -575,3 +575,9 @@ button {
     padding: 0.3rem 0.4rem;
   }
 }
+.avatar {
+  width: 70px;
+  height: 70px;
+  margin: 10px;
+  border-radius: 50%;
+}

@@ -14,11 +14,11 @@ exports.getFeedData = async (req, res) => {
         // Get likes comments and tags for each post in db
         const post = new Feed(postId, userId, userName);
         await post.buildPost();
-        console.log(post);
         postsArr.push(post);
       }
       return postsArr;
     };
+    console.log('pozvao api get feed');
     // Send all the posts with data(likes, comments and tags)
     const posts = await forLoopPosts();
     res.json(posts);

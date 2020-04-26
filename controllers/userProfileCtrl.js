@@ -3,6 +3,7 @@ const UserProfile = require('../models/UserProfile');
 exports.getUserProfile = async (req, res) => {
   const id = req.params.userId;
   try {
+    console.log('pozvao user profile api');
     //Create user profile object with id
     const userProfile = new UserProfile(id);
     // Check if user exists in db

@@ -4,8 +4,9 @@ import Nav from 'react-bootstrap/Nav';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logoutUser } from '../actions/auth';
+import { getUserProfile } from '../actions/profile';
 
-function NavTab({ auth: { isAuthenticated, loading }, logoutUser }) {
+function NavTab({ auth: { isAuthenticated, loading, user }, logoutUser }) {
   const guestLinks = (
     <Fragment>
       <Nav.Link href='/login'>Login</Nav.Link>
@@ -15,6 +16,7 @@ function NavTab({ auth: { isAuthenticated, loading }, logoutUser }) {
 
   const authLinks = (
     <Fragment>
+      <Nav.Link href='/profile'>Profile</Nav.Link>
       <Nav.Link onClick={logoutUser} href='#!'>
         Logout
       </Nav.Link>
@@ -42,4 +44,4 @@ Navbar.propTypes = {
 
 const mapStateToProps = (state) => ({ auth: state.auth });
 
-export default connect(mapStateToProps, { logoutUser })(NavTab);
+export default connect(mapStateToProps, { logoutUser, getUserProfile })(NavTab);
