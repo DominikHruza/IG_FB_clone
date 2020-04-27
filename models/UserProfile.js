@@ -3,8 +3,11 @@ const db = require('../config/db');
 module.exports = class UserProfile {
   constructor(userId) {
     this.id = userId;
+    this.userName = null;
     this.photos = null;
+    this.followers = null;
   }
+
   async getProfile() {
     try {
       const response = await db.query(
@@ -26,18 +29,21 @@ module.exports = class UserProfile {
   async getUserPhotos() {
     try {
       const response = await db.query(
-        `SELECT photos.id as photoId, 
-                users.id  as userId,
-                (SELECT COUNT(likes.photo_id) FROM likes WHERE photo_id = photoId) AS likesNum
+        `SELECT username,
+                photos.id as photoId, 
+                users.id as userId,
+                (SELECT COUNT(likes.photo_id) FROM likes WHERE photo_id = photoId) AS likesNum       
         FROM photos
         INNER JOIN users
         ON photos.user_id = users.id
-        WHERE user_id = ?;`,
+        WHERE photos.user_id = ?;`,
         [this.id]
       );
 
       //Set user photos prop based on query result
-      this.photos = response[0];
+      const data = response[0];
+      this.userName = data[0].username;
+      this.photos = data;
     } catch (error) {
       console.error(error);
     }
