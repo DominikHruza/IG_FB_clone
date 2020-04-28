@@ -6,6 +6,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
+import Card from 'react-bootstrap/Card';
+import ProfileInfo from '../components/ProfileInfo';
 
 import Spinner from 'react-bootstrap/Spinner';
 
@@ -14,21 +16,52 @@ const UserProfile = ({ getUserProfile, match, loadingProfile, profile }) => {
     getUserProfile(match.params.id);
   }, [getUserProfile, match.params.id]);
 
-  const renderUserPhotos = () => (
+  console.log(profile);
+  const renderPosts = () => {
+    const { photos } = profile;
+    return photos.length > 0 ? (
+      photos.map((photo) => (
+        <Card className='m-4' style={{ width: '18rem' }}>
+          <Card.Title className='username'></Card.Title>
+          <Card.Body>
+            <Card.Img
+              className='post-img'
+              variant='top'
+              src={`https://picsum.photos/id/${photo.photoId}/1080/1080`}
+            />
+            <Card.Text className='post-text'>
+              <span>Tags:</span>
+            </Card.Text>
+            <Card.Text className='post-text'>
+              <span>Likes: {photo.likesNum}</span>
+              <span>Comments:</span>
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      ))
+    ) : (
+      <h1>No photos found!</h1>
+    );
+  };
+
+  return (
     <Fragment>
       <Container>
         <Row className='justify-content-md-center'>
-          {profile.photos.map((photo) => (
-            <Image
-              src={`https://picsum.photos/id/${photo.photoId}/1080/1080`}
-            />
-          ))}
+          <Col>
+            {loadingProfile ? (
+              <Spinner animation='border' />
+            ) : (
+              <ProfileInfo key={profile.id} profile={profile} />
+            )}
+          </Col>
+          <Col>
+            {loadingProfile ? <Spinner animation='border' /> : renderPosts()}
+          </Col>
         </Row>
       </Container>
     </Fragment>
   );
-
-  return loadingProfile ? <h1>spinner</h1> : renderUserPhotos();
 };
 
 UserProfile.propTypes = {
