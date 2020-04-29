@@ -4,5 +4,7 @@ const token = require('../config/token');
 const feedCtrl = require('../controllers/feedCtrl');
 
 router.get('/feed', token, feedCtrl.getFeedData);
+router.put('/feed/add-like', token, feedCtrl.updateLikes);
+router.delete('/feed/delete-like', token, feedCtrl.deleteLike);
 
 module.exports = router;

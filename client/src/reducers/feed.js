@@ -1,4 +1,9 @@
-import { GET_FEED, FEED_ERROR } from '../actions/types';
+import {
+  GET_FEED,
+  FEED_ERROR,
+  UPDATE_LIKES,
+  REMOVE_LIKES,
+} from '../actions/types';
 const initialState = {
   posts: [],
   loading: true,
@@ -12,6 +17,16 @@ const feed = (state = initialState, action) => {
       return {
         ...state,
         posts: payload,
+        loading: false,
+      };
+    case UPDATE_LIKES:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post.postId === payload.photo_id
+            ? { ...post, likes: payload.count }
+            : post
+        ),
         loading: false,
       };
     case FEED_ERROR:

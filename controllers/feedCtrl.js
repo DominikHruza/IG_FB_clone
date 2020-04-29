@@ -27,3 +27,25 @@ exports.getFeedData = async (req, res) => {
     res.status(500).send('Internal server error!');
   }
 };
+
+exports.updateLikes = async (req, res) => {
+  try {
+    const { postId, userId } = req.body;
+    const result = await Feed.updateLikes(userId, postId);
+    res.json({ msg: 'Like Added', ...result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal server error!');
+  }
+};
+
+exports.deleteLike = async (req, res) => {
+  try {
+    const { userId, postId } = req.body;
+    const result = await Feed.deleteLike(userId, postId);
+    res.json({ msg: 'Like Deleted', ...result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error!');
+  }
+};

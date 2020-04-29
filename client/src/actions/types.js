@@ -11,3 +11,5 @@ export const GET_FEED = 'GET_FEED';
 export const FEED_ERROR = 'FEED_ERROR';
 export const GET_PROFILE = 'GET_PROFILE';
 export const ERROR_PROFILE = 'ERROR_PROFILE';
+export const UPDATE_LIKES = 'UPDATE_LIKES';
+export const REMOVE_LIKES = 'REMOVE_LIKES';

@@ -123,4 +123,36 @@ module.exports = class Post {
     const imgUrl = `https://picsum.photos/id/${this.postId}/1080/1080`;
     this.imgUrl = imgUrl;
   }
+
+  static async updateLikes(userId, photoId) {
+    try {
+      const insert = await db.query(
+        `INSERT INTO likes (user_id, photo_id) VALUES (?, ?);`,
+        [userId, photoId]
+      );
+      const result = await db.query(
+        `SELECT photo_id, count(*) as count FROM likes WHERE photo_id = ?`,
+        [photoId]
+      );
+      return result[0][0];
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  static async deleteLikes(userId, photoId) {
+    try {
+      const insert = await db.query(
+        `DELETE FROM likes WHERE user_id = ? AND photo_id = ?;`,
+        [userId, photoId]
+      );
+      const result = await db.query(
+        `SELECT photo_id, count(*) as count FROM likes WHERE photo_id = ?`,
+        [photoId]
+      );
+      return result[0][0];
+    } catch (error) {
+      console.error(error);
+    }
+  }
 };
