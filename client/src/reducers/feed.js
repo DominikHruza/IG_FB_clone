@@ -29,6 +29,16 @@ const feed = (state = initialState, action) => {
         ),
         loading: false,
       };
+    case REMOVE_LIKES:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post.postId === payload.post_id
+            ? { ...post, likes: { count: payload.count, users: payload.users } }
+            : post
+        ),
+        loading: false,
+      };
     case FEED_ERROR:
       return {
         ...state,

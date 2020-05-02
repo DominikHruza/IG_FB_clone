@@ -7,22 +7,38 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import faker from 'faker';
-import { addLike } from '../actions/feed';
+import { addLike, removeLike } from '../actions/feed';
 
-const LikeCommentSection = ({ addLike, currUser, postId, likes }) => {
+const LikeCommentSection = ({
+  addLike,
+  removeLike,
+  currUser,
+  postId,
+  likes,
+  liked,
+}) => {
   return (
     <Card>
       <Accordion defaultActiveKey='0'>
         <Fragment>
-          <Button onClick={() => addLike(postId, currUser.id)}>
+          <Button
+            onClick={() =>
+              !liked
+                ? addLike(postId, currUser.id)
+                : removeLike(postId, currUser.id)
+            }
+            className={liked ? 'liked' : ''}
+          >
             <span>{likes.count} </span>
-            <i class='far fa-thumbs-up'></i>
+            <i className='far fa-thumbs-up'></i>
           </Button>
         </Fragment>
 
         <Accordion.Toggle variant='link' eventKey='1'>
           <Button>
-            <i class='fas fa-comment'></i> <span> Comments</span>
+            <i class='fas fa-comment'>
+              <span> Comments</span>
+            </i>
           </Button>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey='1'>
@@ -54,4 +70,6 @@ const mapStateToProps = ({ auth }) => {
   return { currUser: auth.user };
 };
 
-export default connect(mapStateToProps, { addLike })(LikeCommentSection);
+export default connect(mapStateToProps, { addLike, removeLike })(
+  LikeCommentSection
+);

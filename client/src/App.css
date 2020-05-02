@@ -580,3 +580,7 @@ button {
   height: 90px;
   margin: 10px;
 }
+
+.liked {
+  background-color: green !important;
+}

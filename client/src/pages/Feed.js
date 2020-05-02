@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getPosts } from '../actions/feed';
@@ -8,14 +8,16 @@ import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import CardPost from '../components/CardPost';
 
-const Feed = ({ getPosts, posts, loading }) => {
+const Feed = ({ getPosts, posts, loading, currUser }) => {
   useEffect(() => {
     getPosts();
   }, [getPosts]);
 
   const renderPosts = () => {
     return posts.length > 0 ? (
-      posts.map((post) => <CardPost key={post.postId} post={post} />)
+      posts.map((post) => (
+        <CardPost key={post.postId} post={post} currUser={currUser} />
+      ))
     ) : (
       <h1>No posts found!</h1>
     );
@@ -39,11 +41,13 @@ Feed.propTypes = {
   getPosts: PropTypes.func.isRequired,
   posts: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
+  currUser: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = ({ feed }) => ({
+const mapStateToProps = ({ feed, auth }) => ({
   posts: feed.posts,
   loading: feed.loading,
+  currUser: auth.user,
 });
 
 export default connect(mapStateToProps, { getPosts })(Feed);

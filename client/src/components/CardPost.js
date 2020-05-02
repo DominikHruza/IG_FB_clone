@@ -5,8 +5,15 @@ import Image from 'react-bootstrap/Image';
 import LikeCommentSection from '../components/LikeCommentSection';
 import faker from 'faker';
 
-const CardPost = ({ post }) => {
-  const { postId, userName, imgUrl, likes, tags } = post;
+const CardPost = ({ post, currUser }) => {
+  const { postId, userName, imgUrl, likes } = post;
+
+  const currUserLiked = (likes) => {
+    const { users } = likes;
+    //true/false
+    return users.some((user) => user.user_id === currUser.id);
+  };
+
   return (
     <Fragment>
       <Card className='m-4' style={{ width: '18rem' }}>
@@ -19,7 +26,11 @@ const CardPost = ({ post }) => {
             bulk of the card's content.
           </Card.Text>
         </Card.Body>
-        <LikeCommentSection postId={postId} likes={likes} />
+        <LikeCommentSection
+          postId={postId}
+          likes={likes}
+          liked={currUserLiked(likes)}
+        />
       </Card>
     </Fragment>
   );

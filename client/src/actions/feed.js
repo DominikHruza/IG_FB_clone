@@ -34,7 +34,6 @@ export const addLike = (postId, userId) => async (dispatch) => {
   const body = JSON.stringify({ postId, userId });
   try {
     const response = await axios.put('/feed/add-like', body, config);
-    console.log(response.data);
     dispatch({
       type: UPDATE_LIKES,
       payload: response.data,

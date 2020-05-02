@@ -43,7 +43,8 @@ exports.updateLikes = async (req, res) => {
 exports.deleteLike = async (req, res) => {
   try {
     const { userId, postId } = req.body;
-    const result = await Feed.deleteLike(userId, postId);
+    console.log('delete', userId, postId);
+    const result = await Feed.deleteLikes(userId, postId);
     res.json({ msg: 'Like Deleted', post_id: postId, ...result });
   } catch (error) {
     console.log(error);
