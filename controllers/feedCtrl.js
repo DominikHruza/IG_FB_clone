@@ -32,7 +32,8 @@ exports.updateLikes = async (req, res) => {
   try {
     const { postId, userId } = req.body;
     const result = await Feed.updateLikes(userId, postId);
-    res.json({ msg: 'Like Added', ...result });
+
+    res.json({ msg: 'Like Added', post_id: postId, ...result });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal server error!');
@@ -43,7 +44,7 @@ exports.deleteLike = async (req, res) => {
   try {
     const { userId, postId } = req.body;
     const result = await Feed.deleteLike(userId, postId);
-    res.json({ msg: 'Like Deleted', ...result });
+    res.json({ msg: 'Like Deleted', post_id: postId, ...result });
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal server error!');

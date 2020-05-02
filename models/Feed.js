@@ -6,7 +6,7 @@ module.exports = class Post {
       (this.userId = userId),
       (this.userName = user),
       (this.imgUrl = null),
-      (this.likes = null),
+      (this.likes = { count: null, users: null }),
       (this.tags = null),
       (this.comments = null);
   }
@@ -46,23 +46,16 @@ module.exports = class Post {
     const postId = this.postId;
     try {
       //Query post likes
-      const response = await db.execute(
-        `
-        SELECT likes.photo_id as photoId, 
-               count(*) as totalLikes
-        FROM likes
-        INNER JOIN photos
-        ON photos.id = likes.photo_id
-        WHERE photos.id = ?
-        GROUP BY likes.photo_id
-        ORDER BY totalLikes DESC;
-        `,
+      const responseUsers = await db.execute(
+        `SELECT user_id FROM likes WHERE photo_id = ?;`,
         [postId]
       );
-
       //Set this post likes
-      const data = response[0][0];
-      this.likes = data.totalLikes;
+
+      const dataUsers = responseUsers[0];
+      this.likes['count'] = dataUsers.length;
+      this.likes['users'] = dataUsers;
+      return this.likes;
     } catch (error) {
       console.log(error);
     }
@@ -125,16 +118,17 @@ module.exports = class Post {
   }
 
   static async updateLikes(userId, photoId) {
+    console.log(userId, photoId);
     try {
       const insert = await db.query(
         `INSERT INTO likes (user_id, photo_id) VALUES (?, ?);`,
         [userId, photoId]
       );
       const result = await db.query(
-        `SELECT photo_id, count(*) as count FROM likes WHERE photo_id = ?`,
+        `SELECT user_id FROM likes WHERE photo_id = ?`,
         [photoId]
       );
-      return result[0][0];
+      return { count: result[0].length, users: result[0] };
     } catch (error) {
       console.error(error);
     }
@@ -147,10 +141,10 @@ module.exports = class Post {
         [userId, photoId]
       );
       const result = await db.query(
-        `SELECT photo_id, count(*) as count FROM likes WHERE photo_id = ?`,
+        `SELECT user_id FROM likes WHERE photo_id = ?`,
         [photoId]
       );
-      return result[0][0];
+      return { count: result[0].length, users: result[0] };
     } catch (error) {
       console.error(error);
     }

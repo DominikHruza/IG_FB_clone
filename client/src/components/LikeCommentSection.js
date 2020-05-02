@@ -9,13 +9,13 @@ import Image from 'react-bootstrap/Image';
 import faker from 'faker';
 import { addLike } from '../actions/feed';
 
-const CommentSection = ({ addLike, currUser, postId, likes }) => {
+const LikeCommentSection = ({ addLike, currUser, postId, likes }) => {
   return (
     <Card>
       <Accordion defaultActiveKey='0'>
         <Fragment>
           <Button onClick={() => addLike(postId, currUser.id)}>
-            <span>{likes} </span>
+            <span>{likes.count} </span>
             <i class='far fa-thumbs-up'></i>
           </Button>
         </Fragment>
@@ -46,7 +46,7 @@ const CommentSection = ({ addLike, currUser, postId, likes }) => {
   );
 };
 
-CommentSection.propTypes = {
+LikeCommentSection.propTypes = {
   currUser: PropTypes.object.isRequired,
 };
 
@@ -54,4 +54,4 @@ const mapStateToProps = ({ auth }) => {
   return { currUser: auth.user };
 };
 
-export default connect(mapStateToProps, { addLike })(CommentSection);
+export default connect(mapStateToProps, { addLike })(LikeCommentSection);

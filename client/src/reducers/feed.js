@@ -23,8 +23,8 @@ const feed = (state = initialState, action) => {
       return {
         ...state,
         posts: state.posts.map((post) =>
-          post.postId === payload.photo_id
-            ? { ...post, likes: payload.count }
+          post.postId === payload.post_id
+            ? { ...post, likes: { count: payload.count, users: payload.users } }
             : post
         ),
         loading: false,

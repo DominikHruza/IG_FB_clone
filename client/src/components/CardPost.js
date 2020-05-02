@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
-import CommentSection from '../components/CommentSection';
+import LikeCommentSection from '../components/LikeCommentSection';
 import faker from 'faker';
 
 const CardPost = ({ post }) => {
@@ -19,7 +19,7 @@ const CardPost = ({ post }) => {
             bulk of the card's content.
           </Card.Text>
         </Card.Body>
-        <CommentSection postId={postId} likes={likes} />
+        <LikeCommentSection postId={postId} likes={likes} />
       </Card>
     </Fragment>
   );
