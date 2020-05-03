@@ -1,22 +1,59 @@
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Media from 'react-bootstrap/Media';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import faker from 'faker';
-import { addLike, removeLike } from '../actions/feed';
+import {
+  addLike,
+  removeLike,
+  addComment,
+  removeComment,
+} from '../actions/feed';
 
 const LikeCommentSection = ({
   addLike,
   removeLike,
+  addComment,
+  removeComment,
   currUser,
   postId,
   likes,
   liked,
+  comments,
 }) => {
+  const [commentText, setText] = useState('');
+
+  const renderComments = () =>
+    comments.map((comment) => (
+      <Fragment>
+        <li>
+          <Image className='avatar' src={faker.image.avatar()} roundedCircle />
+          <Media.Body>
+            <div key={comment.userId}>
+              <h5>{comment.commentee}</h5>
+              <p>{comment.commentText}</p>
+              <span>{comment.createdAt}</span>
+              {comment.userId === currUser.id && (
+                <i
+                  onClick={() => {
+                    removeComment(postId, currUser.id);
+                  }}
+                  type='button'
+                  className='fas fa-times-circle'
+                ></i>
+              )}
+            </div>
+          </Media.Body>
+        </li>
+      </Fragment>
+    ));
+
   return (
     <Card>
       <Accordion defaultActiveKey='0'>
@@ -33,28 +70,36 @@ const LikeCommentSection = ({
             <i className='far fa-thumbs-up'></i>
           </Button>
         </Fragment>
-
         <Accordion.Toggle variant='link' eventKey='1'>
-          <Button>
-            <i class='fas fa-comment'>
-              <span> Comments</span>
-            </i>
-          </Button>
+          <i type='button' className='fas fa-comment'>
+            <span> Comments</span>
+          </i>
         </Accordion.Toggle>
         <Accordion.Collapse eventKey='1'>
           <Media>
-            <Image
-              className='avatar'
-              src={faker.image.avatar()}
-              roundedCircle
-            />
-            <Media.Body>
-              <h5>Media Heading</h5>
-              <p>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-                scelerisque ante sollicitudin commodo.
-              </p>
-            </Media.Body>
+            <div>
+              <Form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  addComment(postId, currUser.id, commentText);
+                }}
+              >
+                <Form.Group controlId='exampleForm.ControlTextarea1'>
+                  <Form.Label>Comment:</Form.Label>
+                  <Form.Control
+                    as='textarea'
+                    rows='3'
+                    onChange={(e) => {
+                      setText(e.target.value);
+                    }}
+                  />
+                  <Button type='submit'>Post</Button>
+                </Form.Group>
+              </Form>
+            </div>
+            <div>
+              <ul>{renderComments()}</ul>
+            </div>
           </Media>
         </Accordion.Collapse>
       </Accordion>
@@ -70,6 +115,9 @@ const mapStateToProps = ({ auth }) => {
   return { currUser: auth.user };
 };
 
-export default connect(mapStateToProps, { addLike, removeLike })(
-  LikeCommentSection
-);
+export default connect(mapStateToProps, {
+  addLike,
+  removeLike,
+  addComment,
+  removeComment,
+})(LikeCommentSection);

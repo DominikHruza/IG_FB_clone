@@ -13,3 +13,5 @@ export const GET_PROFILE = 'GET_PROFILE';
 export const ERROR_PROFILE = 'ERROR_PROFILE';
 export const UPDATE_LIKES = 'UPDATE_LIKES';
 export const REMOVE_LIKES = 'REMOVE_LIKES';
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const REMOVE_COMMENT = 'REMOVE_COMMENT';

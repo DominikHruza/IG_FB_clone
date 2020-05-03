@@ -6,7 +6,7 @@ import LikeCommentSection from '../components/LikeCommentSection';
 import faker from 'faker';
 
 const CardPost = ({ post, currUser }) => {
-  const { postId, userName, imgUrl, likes } = post;
+  const { postId, userName, imgUrl, likes, comments } = post;
 
   const currUserLiked = (likes) => {
     const { users } = likes;
@@ -30,6 +30,7 @@ const CardPost = ({ post, currUser }) => {
           postId={postId}
           likes={likes}
           liked={currUserLiked(likes)}
+          comments={comments}
         />
       </Card>
     </Fragment>

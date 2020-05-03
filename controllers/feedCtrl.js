@@ -51,3 +51,27 @@ exports.deleteLike = async (req, res) => {
     res.status(500).send('Internal server error!');
   }
 };
+
+exports.addComment = async (req, res) => {
+  try {
+    const { userId, postId, commentText } = req.body;
+    console.log('comment: ', userId, postId);
+    const result = await Feed.addComment(userId, postId, commentText);
+    res.json({ msg: 'Comment posted', post_id: postId, ...result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error!');
+  }
+};
+
+exports.deleteComment = async (req, res) => {
+  try {
+    const { userId, postId } = req.body;
+    console.log('comment: ', userId, postId);
+    const result = await Feed.deleteComment(userId, postId);
+    res.json({ msg: 'Comment deleted', ...result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal server error!');
+  }
+};

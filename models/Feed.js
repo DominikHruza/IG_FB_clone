@@ -77,14 +77,17 @@ module.exports = class Post {
         ON comments.photo_id = photos.id 
         INNER JOIN users
         ON comments.user_id = users.id
-        WHERE photos.id = ?;
+        WHERE photos.id = ?
+        ORDER BY comments.created_at;
         `,
         [postId]
       );
       //Set post comments
       const data = response[0];
       this.comments = data;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //Get post tags
@@ -145,6 +148,42 @@ module.exports = class Post {
         [photoId]
       );
       return { count: result[0].length, users: result[0] };
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  static async addComment(userId, photoId, commentText) {
+    try {
+      const insert = await db.query(
+        `INSERT INTO comments (photo_id, user_id, comment_text) VALUES (?, ?, ?)`,
+        [photoId, userId, commentText]
+      );
+      const comments = await db.query(
+        `SELECT c.user_id as userId, 
+                u.username as commentee,
+                c.comment_text as commentText, 
+                c.created_at as createdAt 
+        FROM comments c INNER JOIN users u 
+        ON c.user_id = u.id
+        WHERE photo_id = ?`,
+        [photoId]
+      );
+
+      return { count: comments[0].length, comments: comments[0] };
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  static async deleteComment(userId, photoId) {
+    try {
+      const insert = await db.query(
+        `DELETE FROM comments WHERE user_id = ? AND photo_id = ?;`,
+        [userId, photoId]
+      );
+
+      return { userId, photoId };
     } catch (error) {
       console.error(error);
     }

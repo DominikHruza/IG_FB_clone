@@ -3,6 +3,8 @@ import {
   FEED_ERROR,
   UPDATE_LIKES,
   REMOVE_LIKES,
+  ADD_COMMENT,
+  REMOVE_COMMENT,
 } from '../actions/types';
 const initialState = {
   posts: [],
@@ -36,6 +38,27 @@ const feed = (state = initialState, action) => {
           post.postId === payload.post_id
             ? { ...post, likes: { count: payload.count, users: payload.users } }
             : post
+        ),
+        loading: false,
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post.postId === payload.post_id
+            ? {
+                ...post,
+                comments: payload.comments,
+              }
+            : post
+        ),
+        loading: false,
+      };
+    case REMOVE_COMMENT:
+      return {
+        ...state,
+        posts: state.posts.comments.filter(
+          (post) => post.photoId === payload.photoId
         ),
         loading: false,
       };
