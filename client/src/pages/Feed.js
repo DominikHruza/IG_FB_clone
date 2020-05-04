@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getPosts } from '../actions/feed';
@@ -9,9 +9,25 @@ import Spinner from 'react-bootstrap/Spinner';
 import CardPost from '../components/CardPost';
 
 const Feed = ({ getPosts, posts, loading, currUser }) => {
+  const [count, scrlCount] = useState(0);
   useEffect(() => {
-    getPosts();
+    getPosts(count);
   }, [getPosts]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [count]);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    scrlCount(() => count + 1);
+    getPosts(count);
+  };
 
   const renderPosts = () => {
     return posts.length > 0 ? (
@@ -22,6 +38,7 @@ const Feed = ({ getPosts, posts, loading, currUser }) => {
       <h1>No posts found!</h1>
     );
   };
+
   return (
     <Container>
       <Row>

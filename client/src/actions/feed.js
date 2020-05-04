@@ -8,9 +8,16 @@ import {
 } from '../actions/types';
 import axios from 'axios';
 
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (count) => async (dispatch) => {
+  console.log(count);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  const body = JSON.stringify({ count });
   try {
-    const response = await axios.get('/feed');
+    const response = await axios.post('/feed', body, config);
     dispatch({
       type: GET_FEED,
       payload: response.data,
@@ -101,13 +108,13 @@ export const addComment = (postId, userId, commentText) => async (dispatch) => {
   }
 };
 
-export const removeComment = (postId, userId) => async (dispatch) => {
+export const removeComment = (commentId, userId) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
-  const body = JSON.stringify({ postId, userId });
+  const body = JSON.stringify({ commentId, userId });
 
   try {
     const response = await axios.put('/feed/delete-comment', body, config);

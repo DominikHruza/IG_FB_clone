@@ -1,8 +1,10 @@
 const Feed = require('../models/Feed');
+
 exports.getFeedData = async (req, res) => {
   try {
+    const { count } = req.body;
     // get random posts from db
-    const feedPosts = await Feed.queryPostsData();
+    const feedPosts = await Feed.queryPostsData(count);
     // Loop over random posts
     const forLoopPosts = async () => {
       const postsArr = [];
@@ -66,9 +68,9 @@ exports.addComment = async (req, res) => {
 
 exports.deleteComment = async (req, res) => {
   try {
-    const { userId, postId } = req.body;
-    console.log('comment: ', userId, postId);
-    const result = await Feed.deleteComment(userId, postId);
+    const { userId, commentId } = req.body;
+    console.log('comment: ', userId, commentId);
+    const result = await Feed.deleteComment(userId, commentId);
     res.json({ msg: 'Comment deleted', ...result });
   } catch (error) {
     console.log(error);

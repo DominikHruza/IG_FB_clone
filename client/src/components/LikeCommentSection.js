@@ -35,14 +35,14 @@ const LikeCommentSection = ({
         <li>
           <Image className='avatar' src={faker.image.avatar()} roundedCircle />
           <Media.Body>
-            <div key={comment.userId}>
+            <div key={comment.id}>
               <h5>{comment.commentee}</h5>
               <p>{comment.commentText}</p>
               <span>{comment.createdAt}</span>
               {comment.userId === currUser.id && (
                 <i
                   onClick={() => {
-                    removeComment(postId, currUser.id);
+                    removeComment(comment.id, currUser.id);
                   }}
                   type='button'
                   className='fas fa-times-circle'

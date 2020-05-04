@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const POSTS_PER_SCROLL = 5;
 
 module.exports = class Post {
   constructor(postId, userId, user) {
@@ -18,20 +19,21 @@ module.exports = class Post {
     this.getImg();
   }
   //Get posts id, users id and usernames
-  static async queryPostsData() {
+  static async queryPostsData(offset) {
     // Get a random posts from db
     try {
       const response = await db.execute(
         `
         SELECT  photos.id AS postId, 
-		            users.id AS userId, 
+                users.id AS userId, 
                 users.username AS userName  
         FROM photos 
         INNER JOIN users 
         ON photos.user_id = users.id
-        ORDER BY rand()
-        LIMIT 5; 
-        `
+        ORDER BY photos.created_at
+        LIMIT ?, 5; 
+        `,
+        [offset]
       );
 
       return response[0];
@@ -68,7 +70,8 @@ module.exports = class Post {
     try {
       const response = await db.execute(
         `
-        SELECT  photos.id as photoId,
+        SELECT  comments.id, 
+                comments.user_id as userId,
                 users.username as commentee,
                 comments.comment_text as commentText,
                 comments.created_at as createdAt
@@ -98,7 +101,7 @@ module.exports = class Post {
       const response = await db.execute(
         `
         SELECT  photo_tags.photo_id as postId,
-		            tags.tag_name as tagName
+                tags.tag_name as tagName
         FROM photo_tags
         INNER JOIN tags
         ON photo_tags.tag_id = tags.id
@@ -160,7 +163,8 @@ module.exports = class Post {
         [photoId, userId, commentText]
       );
       const comments = await db.query(
-        `SELECT c.user_id as userId, 
+        `SELECT c.id,
+                c.user_id as userId, 
                 u.username as commentee,
                 c.comment_text as commentText, 
                 c.created_at as createdAt 
@@ -176,14 +180,14 @@ module.exports = class Post {
     }
   }
 
-  static async deleteComment(userId, photoId) {
+  static async deleteComment(userId, commentId) {
     try {
       const insert = await db.query(
-        `DELETE FROM comments WHERE user_id = ? AND photo_id = ?;`,
-        [userId, photoId]
+        `DELETE FROM comments WHERE user_id = ? AND id = ?;`,
+        [userId, commentId]
       );
 
-      return { userId, photoId };
+      return { userId, commentId };
     } catch (error) {
       console.error(error);
     }

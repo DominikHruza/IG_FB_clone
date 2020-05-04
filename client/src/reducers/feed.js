@@ -14,11 +14,12 @@ const initialState = {
 
 const feed = (state = initialState, action) => {
   const { type, payload } = action;
+
   switch (type) {
     case GET_FEED:
       return {
         ...state,
-        posts: payload,
+        posts: [...state.posts, ...payload],
         loading: false,
       };
     case UPDATE_LIKES:
@@ -57,10 +58,14 @@ const feed = (state = initialState, action) => {
     case REMOVE_COMMENT:
       return {
         ...state,
-        posts: state.posts.comments.filter(
-          (post) => post.photoId === payload.photoId
-        ),
-        loading: false,
+        posts: state.posts.map((post) => {
+          return {
+            ...post,
+            comments: post.comments.filter(
+              (comment) => comment.id !== payload.commentId
+            ),
+          };
+        }),
       };
     case FEED_ERROR:
       return {
