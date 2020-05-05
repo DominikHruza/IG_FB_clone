@@ -2,17 +2,27 @@ const db = require('../config/db');
 const POSTS_PER_SCROLL = 5;
 
 module.exports = class Post {
-  constructor(postId, userId, user, descr) {
+  constructor(postId, userId, user) {
     (this.postId = postId),
       (this.userId = userId),
       (this.userName = user),
-      (this.description = descr),
+      (this.description = null),
       (this.imgUrl = null),
       (this.likes = { count: null, users: null }),
       (this.tags = null),
       (this.comments = null);
   }
-  async createNew() {}
+  async saveToDb(imageUrl, description) {
+    try {
+      const result = await db.query(
+        `INSERT INTO photos (image_url, user_id, photo_description) VALUES (?, ?, ?)`,
+        [imageUrl, this.userId, description]
+      );
+      return result[0].insertId;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async buildPost() {
     await this.queryLikes();
@@ -32,7 +42,7 @@ module.exports = class Post {
         FROM photos 
         INNER JOIN users 
         ON photos.user_id = users.id
-        ORDER BY photos.created_at
+        ORDER BY photos.created_at DESC
         LIMIT ?, 5; 
         `,
         [offset]

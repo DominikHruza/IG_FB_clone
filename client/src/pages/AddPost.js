@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import FormFileLabel from 'react-bootstrap/FormFileLabel';
 import { addPost } from '../actions/addPost';
 
-const AddPost = ({ addPost }) => {
+const AddPost = ({ user, addPost }) => {
   const [postData, setPostData] = useState({
     tags: '',
     description: '',
@@ -16,7 +16,9 @@ const AddPost = ({ addPost }) => {
   const { tags, description, image } = postData;
 
   const handleInput = (e) => {
-    setPostData({ ...postData, [e.target.name]: e.target.value });
+    if (e.target.name === 'image')
+      setPostData({ ...postData, image: e.target.files[0] });
+    else setPostData({ ...postData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
@@ -25,12 +27,12 @@ const AddPost = ({ addPost }) => {
     formData.append('tags', tags);
     formData.append('description', description);
     formData.append('image', image);
-    console.log(image);
+    formData.append('userId', user.id);
     addPost(formData);
   };
 
   return (
-    <Form onSubmit={(e) => handleSubmit(e)} enctype='multipart/form-data'>
+    <Form onSubmit={(e) => handleSubmit(e)} encType=''>
       <Form.Group controlId='exampleForm.ControlInput1'>
         <Form.Label>Tags:</Form.Label>
         <Form.Control
@@ -51,6 +53,7 @@ const AddPost = ({ addPost }) => {
           type='file'
           custom
         />
+        <input name='image' type='file' onChange={(e) => handleInput(e)} />
       </Form.Group>
 
       <Form.Group controlId='exampleForm.ControlTextarea1'>
@@ -72,4 +75,5 @@ const AddPost = ({ addPost }) => {
 
 AddPost.propTypes = {};
 
-export default connect(null, { addPost })(AddPost);
+const mapStateToProps = ({ auth }) => ({ user: auth.user });
+export default connect(mapStateToProps, { addPost })(AddPost);
