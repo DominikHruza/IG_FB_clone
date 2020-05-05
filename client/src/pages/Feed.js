@@ -10,14 +10,12 @@ import CardPost from '../components/CardPost';
 
 const Feed = ({ getPosts, posts, loading, currUser }) => {
   const [count, scrlCount] = useState(0);
-  useEffect(() => {
-    getPosts(count);
-  }, [getPosts]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+    console.log('called');
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [count]);
+  }, []);
 
   const handleScroll = () => {
     if (
@@ -25,9 +23,14 @@ const Feed = ({ getPosts, posts, loading, currUser }) => {
       document.documentElement.offsetHeight
     )
       return;
-    scrlCount(() => count + 1);
-    getPosts(count);
+    scrlCount(count + 5);
   };
+
+  useEffect(() => {
+    console.log('getPost: ', count);
+    loading = true;
+    getPosts(count);
+  }, [count]);
 
   const renderPosts = () => {
     return posts.length > 0 ? (

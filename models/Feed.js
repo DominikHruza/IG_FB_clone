@@ -2,15 +2,17 @@ const db = require('../config/db');
 const POSTS_PER_SCROLL = 5;
 
 module.exports = class Post {
-  constructor(postId, userId, user) {
+  constructor(postId, userId, user, descr) {
     (this.postId = postId),
       (this.userId = userId),
       (this.userName = user),
+      (this.description = descr),
       (this.imgUrl = null),
       (this.likes = { count: null, users: null }),
       (this.tags = null),
       (this.comments = null);
   }
+  async createNew() {}
 
   async buildPost() {
     await this.queryLikes();

@@ -17,6 +17,7 @@ function NavTab({ auth: { isAuthenticated, loading, user }, logoutUser }) {
   const authLinks = (
     <Fragment>
       <Nav.Link href={user ? `/profile/${user.id}` : `#!`}>Profile</Nav.Link>
+      <Nav.Link href={user ? `/add-post/` : `#!`}>Add Post</Nav.Link>
       <Nav.Link onClick={logoutUser} href='#!'>
         Logout
       </Nav.Link>

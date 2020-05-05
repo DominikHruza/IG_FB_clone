@@ -7,6 +7,7 @@ import Landing from './pages/Landing';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Feed from './pages/Feed';
+import AddPost from './pages/AddPost';
 import UserProfile from './pages/UserProfile';
 import PrivateRoute from './utils/PrivateRoute';
 import Alert from './components/Alert';
@@ -36,6 +37,7 @@ const App = () => {
               <Route path='/login' component={Login} />
               <PrivateRoute path='/feed' component={Feed} />
               <PrivateRoute path='/profile/:id' component={UserProfile} />
+              <PrivateRoute path='/add-post' component={AddPost} />
             </Switch>
           </section>
         </Fragment>
