@@ -2,9 +2,9 @@ import React from 'react';
 
 const Navbar = (): JSX.Element => {
   return (
-    <nav className='navbar navbar-expand-lg navbar-light bg-light'>
+    <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
       <a className='navbar-brand' href='#'>
-        Navbar
+        Insta Clone
       </a>
       <button
         className='navbar-toggler'
@@ -27,37 +27,12 @@ const Navbar = (): JSX.Element => {
           </li>
           <li className='nav-item'>
             <a className='nav-link' href='#'>
-              Link
+              My Profile
             </a>
           </li>
-          <li className='nav-item dropdown'>
-            <a
-              className='nav-link dropdown-toggle'
-              href='#'
-              id='navbarDropdown'
-              role='button'
-              data-toggle='dropdown'
-              aria-haspopup='true'
-              aria-expanded='false'
-            >
-              Dropdown
-            </a>
-            <div className='dropdown-menu' aria-labelledby='navbarDropdown'>
-              <a className='dropdown-item' href='#'>
-                Action
-              </a>
-              <a className='dropdown-item' href='#'>
-                Another action
-              </a>
-              <div className='dropdown-divider'></div>
-              <a className='dropdown-item' href='#'>
-                Something else here
-              </a>
-            </div>
-          </li>
-          <li className='nav-item'>
-            <a className='nav-link disabled' href='#' aria-disabled='true'>
-              Disabled
+          <li className='nav-item '>
+            <a className='nav-link' href='/'>
+              Logout
             </a>
           </li>
         </ul>
