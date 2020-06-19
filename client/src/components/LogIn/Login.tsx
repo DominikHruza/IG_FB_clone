@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import FormInput from '../Form_Input/FormInput';
-interface LogInState {
+import Button from '../Button/Button';
+import { userLogin } from '../../actions/auth';
+import AlertBox from '../Alert_box/AlertBox';
+
+export interface LogInData {
   email: string;
   password: string;
 }
-const LogIn = (): JSX.Element => {
-  const [state, setValue] = useState<LogInState>({
+
+interface LoginProps {
+  userLogin: Function;
+}
+const LogIn = ({ userLogin }: LoginProps): JSX.Element => {
+  const [formData, setValue] = useState<LogInData>({
     email: '',
     password: '',
   });
+
+  const { email, password } = formData;
+
+  const onSubmit = (event: Event) => {
+    event.preventDefault();
+    userLogin(formData);
+  };
 
   return (
     <div className='log-in container'>
@@ -20,7 +36,7 @@ const LogIn = (): JSX.Element => {
           name='email'
           type='email'
           handleChange={setValue}
-          value={state.email}
+          value={email}
           required
         />
         <FormInput
@@ -28,12 +44,15 @@ const LogIn = (): JSX.Element => {
           name='password'
           type='password'
           handleChange={setValue}
-          value={state.password}
+          value={password}
           required
         />
       </form>
+      <Button type='submit' onClick={onSubmit}>
+        Log In
+      </Button>
     </div>
   );
 };
 
-export default LogIn;
+export default connect(null, { userLogin })(LogIn);

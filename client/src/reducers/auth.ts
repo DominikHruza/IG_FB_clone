@@ -1,20 +1,33 @@
 import { ActionTypes } from '../actions/types';
-import {} from '../actions/auth';
-import { RegisterAction } from '../actions/auth';
-const { REGISTER_FAIL, REGISTER_SUCCESS } = ActionTypes;
+import { TokenString } from '../actions/auth';
+import { AuthAction } from '../actions/auth';
+const {
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+} = ActionTypes;
 
-const initialState = {
+export interface AuthState {
+  token: string | null;
+  isAuthenticated: boolean | null;
+  loading: boolean;
+  user: Object | null;
+}
+
+const initialState: AuthState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   loading: true,
   user: null,
 };
 
-export default function (state = initialState, action: RegisterAction) {
+export default function (state = initialState, action: AuthAction) {
   const { type, payload } = action;
 
   switch (action.type) {
     case REGISTER_SUCCESS:
+    case LOGIN_SUCCESS:
       return {
         ...state,
         ...payload,
@@ -23,6 +36,7 @@ export default function (state = initialState, action: RegisterAction) {
       };
 
     case REGISTER_FAIL:
+    case LOGIN_FAIL:
       return {
         ...state,
         token: null,

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import FormInput from '../Form_Input/FormInput';
 import Button from '../Button/Button';
 import { userRegister } from '../../actions/auth';
+import { setAlert } from '../../actions/alert';
+import AlertBox from '../Alert_box/AlertBox';
 
 export interface SignInData {
   email: string;
@@ -11,10 +13,17 @@ export interface SignInData {
   username: string;
 }
 
-interface Props {
-  userRegister: Function;
+export interface AlertData {
+  msg: string;
+  type: string;
 }
-const SignIn = ({ userRegister }: Props): JSX.Element => {
+
+interface SignInProps {
+  userRegister: Function;
+  setAlert: Function;
+}
+
+const SignIn = ({ userRegister, setAlert }: SignInProps): JSX.Element => {
   const [formData, setValue] = useState<SignInData>({
     email: '',
     password: '',
@@ -23,13 +32,14 @@ const SignIn = ({ userRegister }: Props): JSX.Element => {
   });
 
   const { email, password, confirmPass, username } = formData;
+
   const onSubmit = (event: Event) => {
     event.preventDefault();
-
     if (password !== confirmPass) {
-      alert('Wrong pass');
+      setAlert('Passwords dont match', 'danger');
     } else {
-      userRegister(email, password, username);
+      console.log();
+      userRegister(formData);
     }
   };
 
@@ -70,7 +80,7 @@ const SignIn = ({ userRegister }: Props): JSX.Element => {
           value={formData.confirmPass}
           required
         />
-        <Button type='submit' onClick={userRegister}>
+        <Button type='submit' onClick={onSubmit}>
           Sign In
         </Button>
       </form>
@@ -78,4 +88,4 @@ const SignIn = ({ userRegister }: Props): JSX.Element => {
   );
 };
 
-export default connect(null, { userRegister })(SignIn);
+export default connect(null, { userRegister, setAlert })(SignIn);

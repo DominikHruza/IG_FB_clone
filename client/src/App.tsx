@@ -7,6 +7,7 @@ import Landing from './Pages/Landing/Landing';
 import Feed from './Pages/Feed/Feed';
 import Profile from './Pages/Profile/Profile';
 import Auth from './Pages/Auth/Auth';
+import AlertBox from './components/Alert_box/AlertBox';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Router>
         <Fragment>
           <Navbar />
+          <AlertBox />
           <Route exact path='/' component={Landing} />
           <Route exact path='/sign-in' component={Auth} />
           <Route path='/profile_:id' component={Profile} />
