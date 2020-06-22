@@ -1,11 +1,11 @@
 import { ActionTypes } from '../actions/types';
-import { TokenString } from '../actions/auth';
 import { AuthAction } from '../actions/auth';
 const {
   REGISTER_FAIL,
   REGISTER_SUCCESS,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
 } = ActionTypes;
 
 export interface AuthState {
@@ -37,6 +37,7 @@ export default function (state = initialState, action: AuthAction) {
 
     case REGISTER_FAIL:
     case LOGIN_FAIL:
+    case LOGOUT:
       return {
         ...state,
         token: null,

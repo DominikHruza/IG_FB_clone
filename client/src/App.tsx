@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import Navbar from './components/Navbar/Navbar';
@@ -8,20 +8,25 @@ import Feed from './Pages/Feed/Feed';
 import Profile from './Pages/Profile/Profile';
 import Auth from './Pages/Auth/Auth';
 import AlertBox from './components/Alert_box/AlertBox';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 function App() {
   return (
     <Provider store={store}>
-      <Router>
+      <BrowserRouter>
         <Fragment>
           <Navbar />
-          <AlertBox />
           <Route exact path='/' component={Landing} />
-          <Route exact path='/sign-in' component={Auth} />
-          <Route path='/profile_:id' component={Profile} />
-          <Route path='/feed' component={Feed} />
+          <section className='container'>
+            <AlertBox />
+            <Switch>
+              <Route path='/sign-in' component={Auth} />
+              <Route path='/profile' component={Profile} />
+              <PrivateRoute exact path='/feed' component={Feed} />
+            </Switch>
+          </section>
         </Fragment>
-      </Router>
+      </BrowserRouter>
     </Provider>
   );
 }

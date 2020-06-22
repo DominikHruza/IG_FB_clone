@@ -4,7 +4,6 @@ import FormInput from '../Form_Input/FormInput';
 import Button from '../Button/Button';
 import { userRegister } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
-import AlertBox from '../Alert_box/AlertBox';
 
 export interface SignInData {
   email: string;

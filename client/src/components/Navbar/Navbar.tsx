@@ -1,11 +1,57 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { StoreState } from '../../reducers';
+import { userLogout } from '../../actions/auth';
+import { AuthState } from '../../reducers/auth';
+import { getUserProfile } from '../../actions/profile';
 
-const Navbar = (): JSX.Element => {
+interface NavbarProps {
+  auth: AuthState;
+  userLogout: Function;
+}
+
+const Navbar = ({
+  auth: { isAuthenticated, loading },
+  userLogout,
+}: NavbarProps): JSX.Element => {
+  //If user not logged in
+  const renderGuestLinks = (
+    <Fragment>
+      <li className='nav-item '>
+        <Link to='/sign-in' className='nav-link' href='/'>
+          Sign In
+        </Link>
+      </li>
+    </Fragment>
+  );
+
+  //If user logged in
+  const renderUserLinks = (
+    <Fragment>
+      <li className='nav-item active'>
+        <Link to='/feed' className='nav-link' href='#'>
+          Feed <span className='sr-only'>(current)</span>
+        </Link>
+      </li>
+      <li className='nav-item'>
+        <Link to='/profile:id' className='nav-link' href='#'>
+          My Profile
+        </Link>
+      </li>
+      <li className='nav-item '>
+        <Link to='/' onClick={() => userLogout()} className='nav-link' href='/'>
+          Logout
+        </Link>
+      </li>
+    </Fragment>
+  );
+
   return (
     <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
-      <a className='navbar-brand' href='#'>
+      <Link to='/feed' className='navbar-brand' href='#'>
         Insta Clone
-      </a>
+      </Link>
       <button
         className='navbar-toggler'
         type='button'
@@ -20,25 +66,21 @@ const Navbar = (): JSX.Element => {
 
       <div className='collapse navbar-collapse' id='navbarSupportedContent'>
         <ul className='navbar-nav mr-auto'>
-          <li className='nav-item active'>
-            <a className='nav-link' href='#'>
-              Home <span className='sr-only'>(current)</span>
-            </a>
-          </li>
-          <li className='nav-item'>
-            <a className='nav-link' href='#'>
-              My Profile
-            </a>
-          </li>
-          <li className='nav-item '>
-            <a className='nav-link' href='/'>
-              Logout
-            </a>
-          </li>
+          {!loading && (
+            <Fragment>
+              {isAuthenticated ? renderUserLinks : renderGuestLinks}
+            </Fragment>
+          )}
         </ul>
       </div>
     </nav>
   );
 };
 
-export default Navbar;
+const mapStateToProps = ({ auth }: StoreState) => {
+  return {
+    auth,
+  };
+};
+
+export default connect(mapStateToProps, { userLogout })(Navbar);

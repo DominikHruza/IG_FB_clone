@@ -10,6 +10,7 @@ const {
   REGISTER_FAIL,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT,
 } = ActionTypes;
 
 export interface TokenString {
@@ -18,10 +19,10 @@ export interface TokenString {
 
 export interface AuthAction {
   type: ActionTypes;
-  payload?: TokenString;
+  payload?: TokenString | ErrorMsg;
 }
 
-export interface ErrorObj {
+export interface ErrorMsg {
   msg: string;
 }
 
@@ -47,7 +48,7 @@ export const userRegister = ({
   } catch (error) {
     const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error: ErrorObj) =>
+      errors.forEach((error: ErrorMsg) =>
         dispatch<any>(setAlert(error.msg, 'danger'))
       );
     }
@@ -77,7 +78,7 @@ export const userLogin = ({ email, password }: LogInData) => async (
   } catch (error) {
     const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error: ErrorObj) =>
+      errors.forEach((error: ErrorMsg) =>
         dispatch<any>(setAlert(error.msg, 'danger'))
       );
     }
@@ -86,4 +87,12 @@ export const userLogin = ({ email, password }: LogInData) => async (
       type: LOGIN_FAIL,
     });
   }
+};
+
+//Logout action
+export const userLogout = () => (dispatch: Dispatch) => {
+  console.log('pozvo');
+  dispatch<AuthAction>({
+    type: LOGOUT,
+  });
 };

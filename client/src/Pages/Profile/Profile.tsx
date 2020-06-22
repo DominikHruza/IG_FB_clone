@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 
-const Profile = (): JSX.Element => {
-  return <div>Profile</div>;
+import { getUserProfile } from '../../actions/profile';
+
+interface ProfileProps {
+  getUserProfile: Function;
+}
+const Profile = ({ getUserProfile }: ProfileProps): JSX.Element => {
+  useEffect(() => {
+    getUserProfile(2);
+  }, []);
+  return <button>User profile</button>;
 };
 
-export default Profile;
+export default connect(null, { getUserProfile })(Profile);

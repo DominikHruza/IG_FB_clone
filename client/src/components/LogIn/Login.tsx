@@ -4,6 +4,9 @@ import FormInput from '../Form_Input/FormInput';
 import Button from '../Button/Button';
 import { userLogin } from '../../actions/auth';
 import AlertBox from '../Alert_box/AlertBox';
+import { StoreState } from '../../reducers';
+import { AuthState } from '../../reducers/auth';
+import { Redirect } from 'react-router-dom';
 
 export interface LogInData {
   email: string;
@@ -12,8 +15,12 @@ export interface LogInData {
 
 interface LoginProps {
   userLogin: Function;
+  auth: AuthState;
 }
-const LogIn = ({ userLogin }: LoginProps): JSX.Element => {
+const LogIn = ({
+  auth: { isAuthenticated },
+  userLogin,
+}: LoginProps): JSX.Element => {
   const [formData, setValue] = useState<LogInData>({
     email: '',
     password: '',
@@ -25,6 +32,10 @@ const LogIn = ({ userLogin }: LoginProps): JSX.Element => {
     event.preventDefault();
     userLogin(formData);
   };
+
+  if (isAuthenticated) {
+    return <Redirect to='/feed' />;
+  }
 
   return (
     <div className='log-in container'>
@@ -55,4 +66,9 @@ const LogIn = ({ userLogin }: LoginProps): JSX.Element => {
   );
 };
 
-export default connect(null, { userLogin })(LogIn);
+const mapStateToProps = ({ auth }: StoreState) => {
+  return {
+    auth,
+  };
+};
+export default connect(mapStateToProps, { userLogin })(LogIn);
