@@ -12,4 +12,5 @@ export enum ActionTypes {
   GET_PROFILE = 'GET_PROFILE',
   ADD_POST = 'ADD_POST',
   ERROR_ADD_POST = 'ERROR_ADD_POST',
+  DELETE_POST = 'ADD_POST',
 }

@@ -1,3 +1,5 @@
+@import '../../App';
+
 .button-pill {
   background-color: #ddd;
   border: none;
@@ -9,4 +11,9 @@
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 16px;
+}
+
+.post-img {
+  height: 150px;
+  width: 180px;
 }

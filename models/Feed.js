@@ -24,6 +24,15 @@ module.exports = class Post {
     }
   }
 
+  static async removeFromDb(postId) {
+    try {
+      const result = await db.query(`CALL delete_post_cascade(?)`, [postId]);
+      return 'Delete Success';
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async buildPost() {
     await this.queryLikes();
     await this.queryComments();

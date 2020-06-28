@@ -40,6 +40,7 @@ app.use(
 
 //Serving images
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
 //Routes
 app.use(routesAuth);
 app.use(routesFeed);

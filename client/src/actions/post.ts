@@ -14,7 +14,7 @@ interface AddPostPayload {
   id?: number;
 }
 
-const { ADD_POST, ERROR_ADD_POST } = ActionTypes;
+const { ADD_POST, ERROR_ADD_POST, DELETE_POST } = ActionTypes;
 export const addPost = (formData: FormData) => async (dispatch: Dispatch) => {
   const config = {
     headers: { 'Content-Type': 'multipart/form-data' },
@@ -28,6 +28,16 @@ export const addPost = (formData: FormData) => async (dispatch: Dispatch) => {
       payload: response.data,
     });
 
+    dispatch<any>(setAlert(response.data.msg, 'success'));
+  } catch (error) {
+    dispatch<any>(setAlert(error.response.data.msg, 'danger'));
+  }
+};
+
+export const deletePost = (postId: number) => async (dispatch: Dispatch) => {
+  try {
+    console.log(postId);
+    const response = await axios.delete(`/delete-post/${postId}`);
     dispatch<any>(setAlert(response.data.msg, 'success'));
   } catch (error) {
     dispatch<any>(setAlert(error.response.data.msg, 'danger'));

@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { StoreState } from '../../reducers';
 import { AuthUser } from '../../actions/auth';
-import { addPost } from '../../actions/addPost';
+import { addPost } from '../../actions/post';
 import Button from '../../components/Button/Button';
 interface AddPostState {
   image: File | any;

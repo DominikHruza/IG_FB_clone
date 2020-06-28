@@ -14,7 +14,16 @@ exports.addNewPost = async (req, res) => {
 
     res.status(200).json({ msg: 'Saved', id: result });
   } catch (error) {
-    console.error(response.data);
+    res.status(500).send('Internal server error');
+  }
+};
+
+exports.deletePost = async (req, res) => {
+  const postId = parseInt(req.params.id);
+  try {
+    const response = await Post.removeFromDb(postId);
+    res.status(200).send({ msg: 'Deleted' });
+  } catch (error) {
     res.status(500).send('Internal server error');
   }
 };

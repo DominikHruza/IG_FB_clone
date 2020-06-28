@@ -6,19 +6,20 @@ import { getUserProfile } from '../../actions/profile';
 import { StoreState } from '../../reducers';
 import { AuthUser } from '../../actions/auth';
 import { ProfileState } from '../../reducers/profile';
-import { ModalComp } from '../../components/Modal/Modal';
-import { url } from 'inspector';
+import { deletePost } from '../../actions/post';
 
 interface ProfileProps {
   getUserProfile: Function;
   profileData: ProfileState;
   loggedUser: AuthUser | null;
+  deletePost: Function;
 }
 
 const Profile = ({
   getUserProfile,
   profileData: { loading, profile },
   loggedUser,
+  deletePost,
 }: ProfileProps): JSX.Element => {
   useEffect(() => {
     getUserProfile(loggedUser?.id);
@@ -26,30 +27,44 @@ const Profile = ({
 
   const [showModal, showToggle] = useState(false);
 
+  const handleDelete = (photoId: number) => {
+    console.log(photoId);
+    deletePost(photoId);
+  };
+
   const renderPosts = () => {
     return profile && profile?.photos.length > 0 ? (
       profile.photos.map((photo) => (
-        <div className='col-md-3 mr-2 mt-2' key={photo.photoId}>
-          <div className='card'>
+        <div className='col-md-3 mr-2 mt-2 ' key={photo.photoId}>
+          <div className='card post-info'>
             <div className='card-body'>
+              {loggedUser?.id == profile.id ? (
+                <button
+                  onClick={(e) => handleDelete(photo.photoId)}
+                  type='button'
+                  className='close btn btn-danger pt-0 mb-2 ml-2'
+                  aria-label='Close'
+                >
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+              ) : null}
               {!loggedUser?.email ? (
                 <img
+                  className='post-img card-img-top'
                   src={`https://picsum.photos/id/${photo.photoId}/1080/1080`}
-                  className='card-img-top'
                   alt='...'
                 />
               ) : (
                 <img
                   src={`http://localhost:5000/images/${photo.url}`}
-                  className='card-img-top'
+                  className='post-img card-img-top'
                   alt='...'
                 />
               )}
+              <p className='mt-2'>{photo.description}</p>
+              <hr />
               <span>Likes: {photo.likesNum}</span> <br />
               <span>Comments: {photo.comments.length}</span> <br />
-              {loggedUser?.id === profile.id ? (
-                <button className='btn btn-danger'>Delete</button>
-              ) : null}
             </div>
           </div>
         </div>
@@ -107,4 +122,6 @@ const mapStateToProps = ({ profileData, auth }: StoreState) => {
   return { profileData, loggedUser: auth.user };
 };
 
-export default connect(mapStateToProps, { getUserProfile })(Profile);
+export default connect(mapStateToProps, { getUserProfile, deletePost })(
+  Profile
+);
