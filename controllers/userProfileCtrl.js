@@ -4,7 +4,7 @@ exports.getUserProfile = async (req, res) => {
   const id = req.params.userId;
   try {
     //Create user profile object with id
-    const userProfile = new UserProfile(2);
+    const userProfile = new UserProfile(id);
     console.log(userProfile);
     //Query user posts in db and send results
     const user = await userProfile.getProfile();

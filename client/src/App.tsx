@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -8,9 +8,20 @@ import Feed from './Pages/Feed/Feed';
 import Profile from './Pages/Profile/Profile';
 import Auth from './Pages/Auth/Auth';
 import AlertBox from './components/Alert_box/AlertBox';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import PrivateRoute from './utils/PrivateRoute/PrivateRoute';
+import setAuthToken from './utils/setToken';
+import { loadUser } from './actions/auth';
+import AddPost from './Pages/AddPost/AddPost';
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 function App() {
+  useEffect(() => {
+    store.dispatch<any>(loadUser());
+  }, []);
+
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -20,9 +31,10 @@ function App() {
           <section className='container'>
             <AlertBox />
             <Switch>
-              <Route path='/sign-in' component={Auth} />
-              <Route path='/profile' component={Profile} />
+              <Route exact path='/sign-in' component={Auth} />
+              <PrivateRoute exact path='/profile/:id' component={Profile} />
               <PrivateRoute exact path='/feed' component={Feed} />
+              <PrivateRoute exact path='/add-post/:id' component={AddPost} />
             </Switch>
           </section>
         </Fragment>

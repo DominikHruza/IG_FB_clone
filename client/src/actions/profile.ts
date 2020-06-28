@@ -34,6 +34,7 @@ export interface Photo {
   userId: number;
   likesNum: number;
   comments: Comment[];
+  url: string;
 }
 
 export interface Comment {

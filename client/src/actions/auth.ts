@@ -3,9 +3,12 @@ import { Dispatch } from 'redux';
 import { ActionTypes } from './types';
 import { SignInData } from '../components/SignIn/SignIn';
 import { LogInData } from '../components/LogIn/Login';
-import { setAlert, AlertAction } from './alert';
+import { setAlert } from './alert';
+import setAuthToken from '../utils/setToken';
 
 const {
+  AUTH_ERROR,
+  AUTH_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   LOGIN_FAIL,
@@ -13,19 +16,24 @@ const {
   LOGOUT,
 } = ActionTypes;
 
-export interface TokenString {
+export interface TokenString extends AuthUser {
   token: string;
 }
 
 export interface AuthAction {
   type: ActionTypes;
-  payload?: TokenString | ErrorMsg;
+  payload: TokenString | AuthUser | null;
 }
 
 export interface ErrorMsg {
   msg: string;
 }
 
+export interface AuthUser {
+  id: number;
+  email: string;
+  username: string;
+}
 //Register action
 export const userRegister = ({
   username,
@@ -54,6 +62,7 @@ export const userRegister = ({
     }
     dispatch<AuthAction>({
       type: REGISTER_FAIL,
+      payload: error,
     });
   }
 };
@@ -85,6 +94,7 @@ export const userLogin = ({ email, password }: LogInData) => async (
 
     dispatch<AuthAction>({
       type: LOGIN_FAIL,
+      payload: error,
     });
   }
 };
@@ -94,5 +104,26 @@ export const userLogout = () => (dispatch: Dispatch) => {
   console.log('pozvo');
   dispatch<AuthAction>({
     type: LOGOUT,
+    payload: null,
   });
+};
+
+export const loadUser = () => async (dispatch: Dispatch) => {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
+  try {
+    const response = await axios.get('/get-user');
+    console.log('uso');
+    dispatch<AuthAction>({
+      type: AUTH_SUCCESS,
+      payload: response.data,
+    });
+  } catch (error) {
+    dispatch<AuthAction>({
+      type: AUTH_ERROR,
+      payload: null,
+    });
+  }
 };

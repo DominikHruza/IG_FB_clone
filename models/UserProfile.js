@@ -76,7 +76,6 @@ module.exports = class UserProfile {
 
       this.follows = followsCount;
       this.follows.list = followsList;
-      
     } catch (error) {
       console.error(error);
     }

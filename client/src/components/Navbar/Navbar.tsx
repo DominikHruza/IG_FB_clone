@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { StoreState } from '../../reducers';
 import { userLogout } from '../../actions/auth';
 import { AuthState } from '../../reducers/auth';
+import { AuthUser } from '../../actions/auth';
 import { getUserProfile } from '../../actions/profile';
 
 interface NavbarProps {
@@ -11,10 +12,10 @@ interface NavbarProps {
   userLogout: Function;
 }
 
-const Navbar = ({
-  auth: { isAuthenticated, loading },
+const Navbar: React.FunctionComponent<NavbarProps> = ({
+  auth: { isAuthenticated, loading, user },
   userLogout,
-}: NavbarProps): JSX.Element => {
+}): JSX.Element => {
   //If user not logged in
   const renderGuestLinks = (
     <Fragment>
@@ -35,8 +36,21 @@ const Navbar = ({
         </Link>
       </li>
       <li className='nav-item'>
-        <Link to='/profile:id' className='nav-link' href='#'>
+        <Link
+          to={user ? `/profile/${user.id}` : '#!'}
+          className='nav-link'
+          href='#'
+        >
           My Profile
+        </Link>
+      </li>
+      <li className='nav-item'>
+        <Link
+          to={user ? `/add-post/${user.id}` : '#!'}
+          className='nav-link'
+          href='#'
+        >
+          Add Post
         </Link>
       </li>
       <li className='nav-item '>

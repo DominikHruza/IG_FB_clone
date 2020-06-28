@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const multer = require('multer');
+const path = require('path');
 //Route imports
 const routesAuth = require('./routes/auth');
 const routesFeed = require('./routes/feed');
@@ -37,6 +38,8 @@ app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
 );
 
+//Serving images
+app.use('/images', express.static(path.join(__dirname, 'images')));
 //Routes
 app.use(routesAuth);
 app.use(routesFeed);
