@@ -13,18 +13,19 @@ module.exports = class UserProfile {
     };
   }
 
-  async getProfile() {
+  async getUsername() {
     try {
       const response = await db.query(
         'SELECT username FROM users where id = ?',
         [this.id]
       );
-
-      //If no user in db return null
-      if (!response[0][0]) {
-        return null;
+      console.log(response[0][0]['username'])  
+      //If no user in db return false
+      if (!response[0][0]['username']) {
+        return false;
       } else {
-        return response[0];
+        this.userName =  response[0][0]['username'];
+        return true
       }
     } catch (err) {
       console.error(error);

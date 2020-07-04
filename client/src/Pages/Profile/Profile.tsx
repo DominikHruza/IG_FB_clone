@@ -25,10 +25,8 @@ const Profile = ({
     getUserProfile(loggedUser?.id);
   }, [loggedUser?.id]);
 
-  const [showModal, showToggle] = useState(false);
 
   const handleDelete = (photoId: number) => {
-    console.log(photoId);
     deletePost(photoId);
   };
 
@@ -40,7 +38,7 @@ const Profile = ({
             <div className='card-body'>
               {loggedUser?.id == profile.id ? (
                 <button
-                  onClick={(e) => handleDelete(photo.photoId)}
+                  onClick={() => handleDelete(photo.photoId)}
                   type='button'
                   className='close btn btn-danger pt-0 mb-2 ml-2'
                   aria-label='Close'
@@ -95,14 +93,13 @@ const Profile = ({
                   <button
                     type='button'
                     className='btn text-center button-pill'
-                    onClick={() => showToggle(true)}
+                   
                   >
                     Followers: {profile?.followers.count}
                   </button>
                   <button
                     type='button'
                     className='btn button-pill'
-                    onClick={() => showToggle(true)}
                   >
                     Following: {profile?.follows.count}
                   </button>
@@ -113,7 +110,7 @@ const Profile = ({
         </div>
       </div>
       <div className='row ml-1'>{renderPosts()}</div>
-      {/* <ModalComp showModal={showModal} /> */}
+      
     </div>
   );
 };

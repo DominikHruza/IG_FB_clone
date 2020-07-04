@@ -115,7 +115,6 @@ export const loadUser = () => async (dispatch: Dispatch) => {
 
   try {
     const response = await axios.get('/get-user');
-    console.log('uso');
     dispatch<AuthAction>({
       type: AUTH_SUCCESS,
       payload: response.data,

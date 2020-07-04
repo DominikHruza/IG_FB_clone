@@ -1,13 +1,13 @@
 const UserProfile = require('../models/UserProfile');
 
 exports.getUserProfile = async (req, res) => {
-  const id = req.params.userId;
+  const id = parseInt(req.params.userId);
   try {
     //Create user profile object with id
     const userProfile = new UserProfile(id);
-    console.log(userProfile);
     //Query user posts in db and send results
-    const user = await userProfile.getProfile();
+    const user = await userProfile.getUsername();
+    console.log(userProfile);
     // Check if user exists in db
     if (!user) {
       return res.status(400).json({ msg: 'No profile for this user' });

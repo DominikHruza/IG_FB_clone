@@ -2,12 +2,13 @@ import { Dispatch } from 'redux';
 import { ActionTypes } from '../actions/types';
 import axios from 'axios';
 import { ErrorMsg } from './auth';
+import { DeletePostAction } from './post';
 
 const { ERROR_PROFILE, GET_PROFILE } = ActionTypes;
 
 export interface ProfileAction {
   type: ActionTypes;
-  payload: ProfileActionPayload | ErrorMsg;
+  payload: ProfileActionPayload | ErrorMsg | DeletePostAction;
 }
 
 export interface ProfileActionPayload {
