@@ -2,11 +2,11 @@ const db = require('../config/db');
 const POSTS_PER_SCROLL = 5;
 
 module.exports = class Post {
-  constructor(postId, userId, user) {
+  constructor(postId, userId, user, description) {
     (this.postId = postId),
       (this.userId = userId),
       (this.userName = user),
-      (this.description = null),
+      (this.description = description),
       (this.imgUrl = null),
       (this.likes = { count: null, users: null }),
       (this.tags = null),
@@ -39,6 +39,7 @@ module.exports = class Post {
     await this.queryTags();
     this.getImg();
   }
+
   //Get posts id, users id and usernames
   static async queryPostsData(offset) {
     // Get a random posts from db
@@ -47,7 +48,8 @@ module.exports = class Post {
         `
         SELECT  photos.id AS postId, 
                 users.id AS userId, 
-                users.username AS userName  
+                users.username AS userName,
+                photo_description AS description
         FROM photos 
         INNER JOIN users 
         ON photos.user_id = users.id
@@ -83,6 +85,9 @@ module.exports = class Post {
       console.log(error);
     }
   }
+
+  //query description
+
 
   //Get post comments
   async queryComments() {
