@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require("../config/db");
 const POSTS_PER_SCROLL = 5;
 
 module.exports = class Post {
@@ -31,7 +31,7 @@ module.exports = class Post {
     this.getImg();
   }
   //Get posts id, users id and usernames
-  static async queryPostsData(offset) {
+  static async queryPostsData(startIndex, rowCount) {
     // Get a random posts from db
     try {
       const response = await db.execute(
@@ -43,9 +43,8 @@ module.exports = class Post {
         INNER JOIN users 
         ON photos.user_id = users.id
         ORDER BY photos.created_at DESC
-        LIMIT ?, 5; 
-        `,
-        [offset]
+        LIMIT ${startIndex}, ${rowCount}; 
+        `
       );
 
       return response[0];
@@ -67,8 +66,8 @@ module.exports = class Post {
       //Set this post likes
 
       const dataUsers = responseUsers[0];
-      this.likes['count'] = dataUsers.length;
-      this.likes['users'] = dataUsers;
+      this.likes["count"] = dataUsers.length;
+      this.likes["users"] = dataUsers;
       return this.likes;
     } catch (error) {
       console.log(error);

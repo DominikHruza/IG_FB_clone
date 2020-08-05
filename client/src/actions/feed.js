@@ -5,19 +5,18 @@ import {
   REMOVE_LIKES,
   ADD_COMMENT,
   REMOVE_COMMENT,
-} from '../actions/types';
-import axios from 'axios';
+} from "../actions/types";
+import axios from "axios";
 
 export const getPosts = (count) => async (dispatch) => {
-  console.log(count);
   const config = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
   const body = JSON.stringify({ count });
   try {
-    const response = await axios.post('/feed', body, config);
+    const response = await axios.get(`/feed?counter=${count}`, config);
     dispatch({
       type: GET_FEED,
       payload: response.data,
@@ -36,13 +35,13 @@ export const getPosts = (count) => async (dispatch) => {
 export const addLike = (postId, userId) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
   console.log(postId, userId);
   const body = JSON.stringify({ postId, userId });
   try {
-    const response = await axios.put('/feed/add-like', body, config);
+    const response = await axios.put("/feed/add-like", body, config);
 
     dispatch({
       type: UPDATE_LIKES,
@@ -62,13 +61,13 @@ export const addLike = (postId, userId) => async (dispatch) => {
 export const removeLike = (postId, userId) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
 
   const body = JSON.stringify({ postId, userId });
   try {
-    const response = await axios.put('/feed/delete-like', body, config);
+    const response = await axios.put("/feed/delete-like", body, config);
 
     dispatch({
       type: REMOVE_LIKES,
@@ -88,13 +87,13 @@ export const removeLike = (postId, userId) => async (dispatch) => {
 export const addComment = (postId, userId, commentText) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
   const body = JSON.stringify({ postId, userId, commentText });
 
   try {
-    const response = await axios.put('/feed/add-comment', body, config);
+    const response = await axios.put("/feed/add-comment", body, config);
 
     dispatch({ type: ADD_COMMENT, payload: response.data });
   } catch (error) {
@@ -111,13 +110,13 @@ export const addComment = (postId, userId, commentText) => async (dispatch) => {
 export const removeComment = (commentId, userId) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
   const body = JSON.stringify({ commentId, userId });
 
   try {
-    const response = await axios.put('/feed/delete-comment', body, config);
+    const response = await axios.put("/feed/delete-comment", body, config);
     console.log(response.data);
     dispatch({ type: REMOVE_COMMENT, payload: response.data });
   } catch (error) {

@@ -1,10 +1,16 @@
-const Feed = require('../models/Feed');
+const Feed = require("../models/Feed");
 
 exports.getFeedData = async (req, res) => {
+  //Infinite scroll
+  const itemsPerPage = 6;
+  const page = req.query.counter;
+  console.log(page);
+  const startIndex = (page - 1) * itemsPerPage;
+
   try {
     const { count } = req.body;
     // get random posts from db
-    const feedPosts = await Feed.queryPostsData(count);
+    const feedPosts = await Feed.queryPostsData(startIndex, itemsPerPage);
     // Loop over random posts
     const forLoopPosts = async () => {
       const postsArr = [];
@@ -20,13 +26,13 @@ exports.getFeedData = async (req, res) => {
       }
       return postsArr;
     };
-    console.log('pozvao api get feed');
+
     // Send all the posts with data(likes, comments and tags)
     const posts = await forLoopPosts();
     res.json(posts);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal server error!');
+    res.status(500).send("Internal server error!");
   }
 };
 
@@ -35,45 +41,45 @@ exports.updateLikes = async (req, res) => {
     const { postId, userId } = req.body;
     const result = await Feed.updateLikes(userId, postId);
 
-    res.json({ msg: 'Like Added', post_id: postId, ...result });
+    res.json({ msg: "Like Added", post_id: postId, ...result });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal server error!');
+    res.status(500).send("Internal server error!");
   }
 };
 
 exports.deleteLike = async (req, res) => {
   try {
     const { userId, postId } = req.body;
-    console.log('delete', userId, postId);
+    console.log("delete", userId, postId);
     const result = await Feed.deleteLikes(userId, postId);
-    res.json({ msg: 'Like Deleted', post_id: postId, ...result });
+    res.json({ msg: "Like Deleted", post_id: postId, ...result });
   } catch (error) {
     console.log(error);
-    res.status(500).send('Internal server error!');
+    res.status(500).send("Internal server error!");
   }
 };
 
 exports.addComment = async (req, res) => {
   try {
     const { userId, postId, commentText } = req.body;
-    console.log('comment: ', userId, postId);
+    console.log("comment: ", userId, postId);
     const result = await Feed.addComment(userId, postId, commentText);
-    res.json({ msg: 'Comment posted', post_id: postId, ...result });
+    res.json({ msg: "Comment posted", post_id: postId, ...result });
   } catch (error) {
     console.log(error);
-    res.status(500).send('Internal server error!');
+    res.status(500).send("Internal server error!");
   }
 };
 
 exports.deleteComment = async (req, res) => {
   try {
     const { userId, commentId } = req.body;
-    console.log('comment: ', userId, commentId);
+    console.log("comment: ", userId, commentId);
     const result = await Feed.deleteComment(userId, commentId);
-    res.json({ msg: 'Comment deleted', ...result });
+    res.json({ msg: "Comment deleted", ...result });
   } catch (error) {
     console.log(error);
-    res.status(500).send('Internal server error!');
+    res.status(500).send("Internal server error!");
   }
 };
