@@ -17,7 +17,7 @@ const CardPost = ({ post, currUser }) => {
   const avatarSrc = useRef(faker.image.avatar());
   return (
     <Fragment>
-      <Card className="card-post">
+      <Card key={postId} className="card-post">
         <div className="avatar">
           <Image src={avatarSrc.current} roundedCircle />
         </div>

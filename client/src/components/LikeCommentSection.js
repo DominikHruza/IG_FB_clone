@@ -5,10 +5,10 @@ import Media from "react-bootstrap/Media";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import Image from "react-bootstrap/Image";
 import faker from "faker";
+import moment from "moment";
 import {
   addLike,
   removeLike,
@@ -28,11 +28,19 @@ const LikeCommentSection = ({
   comments,
 }) => {
   const [commentText, setText] = useState("");
+  // format  date and time
+  const formatDatetime = (timestamp) => {
+    const formatDef = "DD-MM-YYYY HH:mm";
+    const date = new Date(timestamp);
+
+    const datetime = moment(date).format(formatDef);
+    return datetime;
+  };
 
   const renderComments = () =>
-    comments.map((comment) => (
-      <Fragment>
-        <li className="comment-item">
+    comments.map((comment, index) => (
+      <Fragment key={comment.id}>
+        <li className="comment-item" key={comment.id}>
           <Image
             className="avatar-comment"
             src={faker.image.avatar()}
@@ -43,7 +51,7 @@ const LikeCommentSection = ({
               <h5 className="comentee-name">{comment.commentee}</h5>
               <p className="comment-text">{comment.commentText}</p>
               <span className="comment-timestamp">
-                Commented at: {comment.createdAt}
+                Commented at: {formatDatetime(comment.createdAt)}
               </span>
               {comment.userId === currUser.id && (
                 <i
@@ -62,7 +70,7 @@ const LikeCommentSection = ({
     ));
 
   return (
-    <Card className="comment-like-section">
+    <Card key={postId} className="comment-like-section">
       <Accordion defaultActiveKey="0">
         <Fragment>
           <Button
@@ -102,7 +110,9 @@ const LikeCommentSection = ({
                     setText(e.target.value);
                   }}
                 />
-                <Button type="submit">Post</Button>
+                <Button className="mt-2" type="submit">
+                  Post
+                </Button>
               </Form.Group>
             </Form>
             <div className="row">

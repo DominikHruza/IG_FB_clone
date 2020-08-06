@@ -16,7 +16,8 @@ function NavTab({ auth: { isAuthenticated, loading, user }, logoutUser }) {
 
   const authLinks = (
     <Fragment>
-      <Nav.Link href={user ? `/profile/${user.id}` : `#!`}>Profile</Nav.Link>
+      <Nav.Link href={user ? `/profile/${user.id}` : `#!`}>My profile</Nav.Link>
+      <Nav.Link href={"/feed"}>Feed</Nav.Link>
       <Nav.Link href={user ? `/add-post/` : `#!`}>Add Post</Nav.Link>
 
       <Nav.Link onClick={logoutUser} href="#!">
@@ -26,7 +27,13 @@ function NavTab({ auth: { isAuthenticated, loading, user }, logoutUser }) {
   );
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+    <Navbar
+      bg="dark"
+      variant="dark"
+      expand="lg"
+      fixed="top"
+      className=" navbar-right"
+    >
       <Navbar.Brand href="/">Picture Show</Navbar.Brand>
 
       <Navbar.Collapse id="basic-navbar-nav">

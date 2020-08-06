@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import { getPosts } from "../actions/feed";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -13,35 +12,33 @@ const Feed = ({ getPosts, posts, loading, currUser }) => {
 
   const observer = useRef();
   const lastPost = useCallback((node) => {
+    console.log(loading);
     if (loading) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        console.log("visible");
         scrlCount((prevCount) => prevCount + 1);
+        loading = true;
       }
     });
     if (node) observer.current.observe(node);
-    return console.log(node);
   });
 
   useEffect(() => {
-    console.log("getPost: ", count);
-    loading = true;
     getPosts(count);
-  }, [count]);
+  }, [count, loading]);
 
   const renderPosts = () => {
     return posts.length > 0 ? (
       posts.map((post, idx) => {
         if (posts.length === idx + 1) {
           return (
-            <div ref={lastPost}>
-              <CardPost key={post.postId} post={post} currUser={currUser} />
+            <div key={idx} ref={lastPost}>
+              <CardPost post={post} currUser={currUser} />
             </div>
           );
         } else {
-          return <CardPost key={post.postId} post={post} currUser={currUser} />;
+          return <CardPost key={idx} post={post} currUser={currUser} />;
         }
       })
     ) : (
@@ -62,13 +59,6 @@ const Feed = ({ getPosts, posts, loading, currUser }) => {
       </Row>
     </Container>
   );
-};
-
-Feed.propTypes = {
-  getPosts: PropTypes.func.isRequired,
-  posts: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired,
-  currUser: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = ({ feed, auth }) => ({
