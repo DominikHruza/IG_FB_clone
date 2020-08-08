@@ -24,6 +24,9 @@ module.exports = class Post {
     }
   }
 
+  static async deleteFromDb(postId) {
+    const result = await db.query(`DELETE FROM photos WHERE id = ${postId}`);
+  }
   async buildPost() {
     await this.queryLikes();
     await this.queryComments();

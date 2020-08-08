@@ -1,16 +1,18 @@
-const UserProfile = require('../models/UserProfile');
+const UserProfile = require("../models/UserProfile");
 
 exports.getUserProfile = async (req, res) => {
   const id = req.params.userId;
+
   try {
     //Create user profile object with id
-    const userProfile = new UserProfile(2);
+    const userProfile = new UserProfile(parseInt(id));
     console.log(userProfile);
     //Query user posts in db and send results
     const user = await userProfile.getProfile();
+
     // Check if user exists in db
     if (!user) {
-      return res.status(400).json({ msg: 'No profile for this user' });
+      return res.status(400).json({ msg: "No profile for this user" });
     }
 
     // Build profile response from db
@@ -22,7 +24,7 @@ exports.getUserProfile = async (req, res) => {
     res.status(200).json(userProfile);
   } catch (err) {
     console.error(err.messsage);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 };
 
@@ -35,6 +37,6 @@ exports.getMyProfile = async (req, res) => {
     res.json(myProfile.photos);
   } catch (err) {
     console.error(err.messsage);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 };

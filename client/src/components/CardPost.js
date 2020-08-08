@@ -1,11 +1,13 @@
 import React, { Fragment, useRef } from "react";
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
+import Spinner from "react-bootstrap/Spinner";
+import { connect } from "react-redux";
 
 import LikeCommentSection from "../components/LikeCommentSection";
 import faker from "faker";
 
-const CardPost = ({ post, currUser }) => {
+const CardPost = ({ post, currUser, loading }) => {
   const { postId, userName, imgUrl, likes, comments } = post;
 
   const currUserLiked = (likes) => {
@@ -23,7 +25,12 @@ const CardPost = ({ post, currUser }) => {
         </div>
         <Card.Title className="username">{userName}</Card.Title>
         <Card.Body>
-          <Card.Img className="post-img" variant="top" src={imgUrl} />
+          {loading ? (
+            <Spinner animation="border" role="status" />
+          ) : (
+            <Card.Img className="post-img" variant="top" src={imgUrl} />
+          )}
+
           <Card.Text className="post-text">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -42,4 +49,9 @@ const CardPost = ({ post, currUser }) => {
   );
 };
 
-export default CardPost;
+const mapStateToProps = ({ loading }) => {
+  return {
+    loading,
+  };
+};
+export default connect(mapStateToProps, null)(CardPost);

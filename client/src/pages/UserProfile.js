@@ -1,41 +1,73 @@
-import React, { Fragment, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { getUserProfile } from '../actions/profile';
-import PropTypes from 'prop-types';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import React, { Fragment, useEffect } from "react";
+import { connect } from "react-redux";
+import { getUserProfile } from "../actions/profile";
+import { deletePost } from "../actions/post";
+import PropTypes from "prop-types";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 
-import Card from 'react-bootstrap/Card';
-import ProfileInfo from '../components/ProfileInfo';
+import Card from "react-bootstrap/Card";
+import ProfileInfo from "../components/ProfileInfo";
 
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from "react-bootstrap/Spinner";
+import LikeCommentSection from "../components/LikeCommentSection";
 
-const UserProfile = ({ getUserProfile, match, loadingProfile, profile }) => {
+const UserProfile = ({
+  getUserProfile,
+  deletePost,
+  match,
+  loadingProfile,
+  profile,
+}) => {
   useEffect(() => {
     getUserProfile(match.params.id);
-  }, [getUserProfile, match.params.id]);
+  }, []);
 
   console.log(profile);
   const renderPosts = () => {
     const { photos } = profile;
     return photos.length > 0 ? (
       photos.map((photo) => (
-        <Card className='m-4' style={{ width: '18rem' }}>
-          <Card.Title className='username'></Card.Title>
+        <Card key={photo.id} className="m-4 profile-post-card">
+          <Card.Title className="username">
+            <Button
+              className="del-post-btn"
+              variant="danger"
+              onClick={() => deletePost(photo.photoId)}
+            >
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </Button>
+          </Card.Title>
           <Card.Body>
             <Card.Img
-              className='post-img'
-              variant='top'
+              className="post-img"
+              variant="top"
               src={`https://picsum.photos/id/${photo.photoId}/1080/1080`}
             />
-            <Card.Text className='post-text'>
-              <span>Tags:</span>
-            </Card.Text>
-            <Card.Text className='post-text'>
-              <span>Likes: {photo.likesNum}</span>
-              <span>Comments:</span>
-            </Card.Text>
+            <Card.Text className="post-text"></Card.Text>
+            {photo.description ? (
+              <p>{photo.description}</p>
+            ) : (
+              <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+                quae ab illo inventore veritatis et quasi architecto beatae
+                vitae dicta sunt explicabo.
+              </p>
+            )}
+            <Button>
+              <span>{photo.likesNum} </span>
+              <i className="far fa-thumbs-up"></i>
+            </Button>
+
+            <Button className="btn btn-info">
+              <i className="fas fa-comment">
+                {" "}
+                {photo.comments.length} Comments
+              </i>
+            </Button>
           </Card.Body>
         </Card>
       ))
@@ -47,16 +79,16 @@ const UserProfile = ({ getUserProfile, match, loadingProfile, profile }) => {
   return (
     <Fragment>
       <Container>
-        <Row className='justify-content-md-center'>
+        <Row className="justify-content-md-center">
           <Col>
             {loadingProfile ? (
-              <Spinner animation='border' />
+              <Spinner animation="border" />
             ) : (
               <ProfileInfo key={profile.id} profile={profile} />
             )}
           </Col>
           <Col>
-            {loadingProfile ? <Spinner animation='border' /> : renderPosts()}
+            {loadingProfile ? <Spinner animation="border" /> : renderPosts()}
           </Col>
         </Row>
       </Container>
@@ -64,16 +96,11 @@ const UserProfile = ({ getUserProfile, match, loadingProfile, profile }) => {
   );
 };
 
-UserProfile.propTypes = {
-  auth: PropTypes.object.isRequired,
-  getUserProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
-  loadingProfile: PropTypes.bool.isRequired,
-};
-
 const mapStateToProps = (state) => ({
   auth: state.auth,
   profile: state.profile.profile,
   loadingProfile: state.profile.loading,
 });
-export default connect(mapStateToProps, { getUserProfile })(UserProfile);
+export default connect(mapStateToProps, { getUserProfile, deletePost })(
+  UserProfile
+);

@@ -1,4 +1,9 @@
-import { ERROR_PROFILE, GET_PROFILE } from '../actions/types';
+import {
+  ERROR_PROFILE,
+  GET_PROFILE,
+  ADD_POST,
+  DELETE_POST,
+} from "../actions/types";
 
 const initialState = {
   profile: null,
@@ -19,6 +24,17 @@ const userProfile = (state = initialState, action) => {
       return {
         ...state,
         error: payload,
+      };
+    case DELETE_POST:
+      console.log(state.profile.photos);
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          photos: state.profile.photos.filter(
+            (photo) => photo.photoId !== payload
+          ),
+        },
       };
 
     default:

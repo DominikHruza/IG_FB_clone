@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require("../config/db");
 
 module.exports = class UserProfile {
   constructor(userId) {
@@ -16,15 +16,16 @@ module.exports = class UserProfile {
   async getProfile() {
     try {
       const response = await db.query(
-        'SELECT username FROM users where id = ?',
+        "SELECT username FROM users where id = ?",
         [this.id]
       );
 
-      //If no user in db return null
+      //If no user in db return false
       if (!response[0][0]) {
-        return null;
+        return false;
       } else {
-        return response[0];
+        this.userName = response[0][0].username;
+        return true;
       }
     } catch (err) {
       console.error(error);
@@ -37,7 +38,6 @@ module.exports = class UserProfile {
 
       //Set user photos prop based on query result
       const data = response[0];
-      this.userName = data[0][0].username;
       this.photos = data[0];
     } catch (error) {
       console.error(error);
@@ -76,7 +76,6 @@ module.exports = class UserProfile {
 
       this.follows = followsCount;
       this.follows.list = followsList;
-      
     } catch (error) {
       console.error(error);
     }

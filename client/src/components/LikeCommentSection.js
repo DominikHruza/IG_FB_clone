@@ -74,11 +74,13 @@ const LikeCommentSection = ({
       <Accordion defaultActiveKey="0">
         <Fragment>
           <Button
-            onClick={() =>
-              !liked
-                ? addLike(postId, currUser.id)
-                : removeLike(postId, currUser.id)
-            }
+            onClick={() => {
+              if (currUser) {
+                !liked
+                  ? addLike(postId, currUser.id)
+                  : removeLike(postId, currUser.id);
+              }
+            }}
             className={liked ? "liked" : ""}
           >
             <span>{likes.count} </span>
@@ -94,8 +96,10 @@ const LikeCommentSection = ({
               className="row"
               onSubmit={(e) => {
                 e.preventDefault();
-                addComment(postId, currUser.id, commentText);
-                setText("");
+                if (postId) {
+                  addComment(postId, currUser.id, commentText);
+                  setText("");
+                }
               }}
             >
               <Form.Group
@@ -123,10 +127,6 @@ const LikeCommentSection = ({
       </Accordion>
     </Card>
   );
-};
-
-LikeCommentSection.propTypes = {
-  currUser: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = ({ auth }) => {

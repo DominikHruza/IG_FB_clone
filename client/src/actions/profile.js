@@ -1,5 +1,5 @@
-import { ERROR_PROFILE, GET_PROFILE } from '../actions/types';
-import axios from 'axios';
+import { ERROR_PROFILE, GET_PROFILE } from "../actions/types";
+import axios from "axios";
 
 export const getUserProfile = (id) => async (dispatch) => {
   const response = await axios.get(`/user/${id}`);
@@ -9,3 +9,5 @@ export const getUserProfile = (id) => async (dispatch) => {
     payload: response.data,
   });
 };
+
+export const addPost = () => async (dispatch) => {};
