@@ -49,7 +49,7 @@ module.exports = class UserProfile {
       const photo = this.photos[index];
       const result = await db.query(`CALL getComments(?);`, [photo.photoId]);
 
-      photo.comments = result[0];
+      photo.comments = [result[0][0][0]];
     }
   }
 

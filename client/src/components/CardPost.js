@@ -12,8 +12,10 @@ const CardPost = ({ post, currUser, loading }) => {
 
   const currUserLiked = (likes) => {
     const { users } = likes;
-    //true/false
-    return users.some((user) => user.user_id === currUser.id);
+    if (currUser) {
+      //true/false
+      return users.some((user) => user.user_id === currUser.id);
+    }
   };
 
   const avatarSrc = useRef(faker.image.avatar());

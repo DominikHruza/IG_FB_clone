@@ -26,7 +26,7 @@ const Feed = ({ getPosts, posts, loading, currUser }) => {
 
   useEffect(() => {
     getPosts(count);
-  }, [count, loading]);
+  }, [count, loading, currUser]);
 
   const renderPosts = () => {
     return posts.length > 0 ? (

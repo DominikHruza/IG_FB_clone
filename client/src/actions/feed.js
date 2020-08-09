@@ -17,6 +17,7 @@ export const getPosts = (count) => async (dispatch) => {
   const body = JSON.stringify({ count });
   try {
     const response = await axios.get(`/feed?counter=${count}`, config);
+
     dispatch({
       type: GET_FEED,
       payload: response.data,

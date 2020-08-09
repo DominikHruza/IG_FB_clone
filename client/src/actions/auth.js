@@ -19,7 +19,7 @@ export const loadUser = () => async (dispatch) => {
 
   try {
     const response = await axios.get("/get-user");
-    dispatch({
+    await dispatch({
       type: USER_LOADED,
       payload: response.data,
     });

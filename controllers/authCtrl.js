@@ -1,7 +1,7 @@
-const Auth = require('../models/Auth');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
+const Auth = require("../models/Auth");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 
 exports.getUser = async (req, res) => {
   try {
@@ -9,12 +9,12 @@ exports.getUser = async (req, res) => {
     res.json(user);
   } catch (error) {
     console.log(error.message);
-    res.status(500).send('Server error');
+    res.status(500).send("Server error");
   }
 };
 
 exports.getUserLogin = (req, res) => {
-  res.send('User login');
+  res.send("User login");
 };
 
 exports.postSignUp = async (req, res) => {
@@ -36,7 +36,7 @@ exports.postSignUp = async (req, res) => {
     //insert user in db, if duplicate entry(1062) send err to client with msg
     const userDbInsert = await user.insertNewUser();
     if (userDbInsert === 1062) {
-      return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+      return res.status(400).json({ errors: [{ msg: "User already exists" }] });
     }
     //Generate and send jwt token
     const payload = {
@@ -47,8 +47,8 @@ exports.postSignUp = async (req, res) => {
     console.log(payload);
     jwt.sign(
       payload,
-      'mypracticejwttokengenerate',
-      { expiresIn: 360000 },
+      "mypracticejwttokengenerate",
+      { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
         res.json({ token });
@@ -57,7 +57,7 @@ exports.postSignUp = async (req, res) => {
   } catch (error) {
     // Catch server errors
     console.error(error.message);
-    res.status(500).send('Internal server error');
+    res.status(500).send("Internal server error");
   }
 };
 
@@ -66,13 +66,13 @@ exports.postUserLogin = async (req, res) => {
   const user = await Auth.checkUserExist(email);
   //If email does not exist in db
   if (!user) {
-    return res.status(400).json({ errors: [{ msg: 'Invalid credentials' }] });
+    return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
   }
 
   // Else continue with pass validation
   const match = await Auth.validatePassword(password, user.pass);
   if (!match) {
-    return res.status(400).json({ errors: [{ msg: 'Invalid credentials' }] });
+    return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
   }
 
   //Generate and send jwt token
@@ -83,7 +83,7 @@ exports.postUserLogin = async (req, res) => {
   };
   jwt.sign(
     payload,
-    'mypracticejwttokengenerate',
+    "mypracticejwttokengenerate",
     { expiresIn: 360000 },
     (err, token) => {
       if (err) throw err;

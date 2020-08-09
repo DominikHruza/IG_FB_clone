@@ -13,10 +13,12 @@ import ProfileInfo from "../components/ProfileInfo";
 
 import Spinner from "react-bootstrap/Spinner";
 import LikeCommentSection from "../components/LikeCommentSection";
+import { setAlert } from "../actions/alerts";
 
 const UserProfile = ({
   getUserProfile,
   deletePost,
+  setAlert,
   match,
   loadingProfile,
   profile,
@@ -25,6 +27,11 @@ const UserProfile = ({
     getUserProfile(match.params.id);
   }, []);
 
+  const handlePostDelete = (photo) => {
+    console.log("uso");
+    deletePost(photo.photoId);
+    setAlert("Post deleted!", "success");
+  };
   console.log(profile);
   const renderPosts = () => {
     const { photos } = profile;
@@ -35,7 +42,7 @@ const UserProfile = ({
             <Button
               className="del-post-btn"
               variant="danger"
-              onClick={() => deletePost(photo.photoId)}
+              onClick={() => handlePostDelete(photo)}
             >
               <i class="fa fa-trash" aria-hidden="true"></i>
             </Button>
@@ -101,6 +108,8 @@ const mapStateToProps = (state) => ({
   profile: state.profile.profile,
   loadingProfile: state.profile.loading,
 });
-export default connect(mapStateToProps, { getUserProfile, deletePost })(
-  UserProfile
-);
+export default connect(mapStateToProps, {
+  getUserProfile,
+  deletePost,
+  setAlert,
+})(UserProfile);

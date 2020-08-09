@@ -18,9 +18,10 @@ exports.getFeedData = async (req, res) => {
         const postId = feedPosts[index].postId;
         const userId = feedPosts[index].userId;
         const userName = feedPosts[index].userName;
+        const createdAt = feedPosts[index].createdAt;
 
         // Get likes comments and tags for each post in db
-        const post = new Feed(postId, userId, userName);
+        const post = new Feed(postId, userId, userName, createdAt);
         await post.buildPost();
         postsArr.push(post);
       }

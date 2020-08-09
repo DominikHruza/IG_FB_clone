@@ -5,8 +5,9 @@ import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import FormFileLabel from "react-bootstrap/FormFileLabel";
 import { addPost } from "../actions/post";
+import { setAlert } from "../actions/alerts";
 
-const AddPost = ({ user, addPost }) => {
+const AddPost = ({ user, addPost, setAlert }) => {
   const [postData, setPostData] = useState({
     tags: "",
     description: "",
@@ -28,7 +29,13 @@ const AddPost = ({ user, addPost }) => {
     formData.append("description", description);
     formData.append("image", image);
     formData.append("userId", user.id);
-    addPost(formData);
+    if (image !== "") {
+      addPost(formData);
+      console.log(image);
+      setAlert("Post Created", "success");
+    } else {
+      setAlert("Please select file", "danger");
+    }
   };
 
   return (
@@ -57,4 +64,4 @@ const AddPost = ({ user, addPost }) => {
 };
 
 const mapStateToProps = ({ auth }) => ({ user: auth.user });
-export default connect(mapStateToProps, { addPost })(AddPost);
+export default connect(mapStateToProps, { addPost, setAlert })(AddPost);

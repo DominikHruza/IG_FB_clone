@@ -2,8 +2,9 @@ const db = require("../config/db");
 const POSTS_PER_SCROLL = 5;
 
 module.exports = class Post {
-  constructor(postId, userId, user) {
+  constructor(postId, userId, user, createdAt) {
     (this.postId = postId),
+      (this.createdAt = createdAt),
       (this.userId = userId),
       (this.userName = user),
       (this.description = null),
@@ -41,7 +42,8 @@ module.exports = class Post {
         `
         SELECT  photos.id AS postId, 
                 users.id AS userId, 
-                users.username AS userName  
+                users.username AS userName,
+                photos.created_at as createdAt
         FROM photos 
         INNER JOIN users 
         ON photos.user_id = users.id
